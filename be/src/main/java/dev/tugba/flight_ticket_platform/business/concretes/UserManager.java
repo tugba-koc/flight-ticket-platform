@@ -25,6 +25,18 @@ public class UserManager implements UserService {
 
         @Override
         public String createUser(CreateUserRequest createUserRequest) {
+                userRepository.save(User.builder()
+                                .email(createUserRequest.getEmail())
+                                .password(createUserRequest.getPassword())
+                                .turkishId(createUserRequest.getTurkishId())
+                                .name(createUserRequest.getName())
+                                .surname(createUserRequest.getSurname())
+                                .phoneNumber(createUserRequest.getPhoneNumber())
+                                .roles(List.of(createUserRequest.getRole()))
+                                .gender(createUserRequest.getGender())
+                                .createdAt(java.time.LocalDateTime.now())
+                                .updatedAt(java.time.LocalDateTime.now())
+                                .build());
                 String ok = "ok";
                 return ok;
         }

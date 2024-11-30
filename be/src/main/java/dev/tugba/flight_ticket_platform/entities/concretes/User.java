@@ -22,8 +22,8 @@ public class User {
     @Id
     private String id;
 
-    @Field("username")
-    private String username;
+    @Field("name")
+    private String name;
 
     @Field("surname")
     private String surname;

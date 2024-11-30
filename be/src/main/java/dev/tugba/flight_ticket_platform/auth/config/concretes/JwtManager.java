@@ -24,7 +24,7 @@ public class JwtManager implements JwtService {
     public String generateToken(User user) {
         return Jwts
             .builder()
-            .subject(user.getUsername())
+            .subject(user.getName())
             .claim("userId", user.getId())
             .issuedAt(new Date(System.currentTimeMillis()))
             .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
