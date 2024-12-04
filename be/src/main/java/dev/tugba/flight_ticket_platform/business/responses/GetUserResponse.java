@@ -14,7 +14,10 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class GetUserResponse {
-    private User userData;
+    private String email;
+    private String name;
+    private String surname;
+    private String phoneNumber;
     private int status;
     private LocalDateTime datetime;
     private String requestId;

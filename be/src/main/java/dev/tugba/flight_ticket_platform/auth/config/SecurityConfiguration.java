@@ -37,6 +37,7 @@ public class SecurityConfiguration {
         http
         .csrf(customizer -> customizer.disable())
         .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+                .requestMatchers("/api/v1/login").permitAll()
                 .requestMatchers("/api/v1/register").permitAll()
                 .requestMatchers("/api/v1/user").hasRole(Role.VISITOR.name())
                 .anyRequest()

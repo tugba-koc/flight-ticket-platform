@@ -31,15 +31,9 @@ public class AuthUserManager implements UserService {
 
         @Override
         public UserDetails loadUserByUsername(String username) {
-            if (Helper.isValidEmail(username)) {
                 return userRepository.findByEmail(username)
                         .map(user -> (UserDetails) user)
                         .orElseThrow(() -> new UserNotFoundException("No user found with this email"));
-            } else {
-                return userRepository.findByTurkishId(username)
-                        .map(user -> (UserDetails) user)
-                        .orElseThrow(() -> new UserNotFoundException("No user found with this Turkish ID"));
-            }
         }
     }
 }

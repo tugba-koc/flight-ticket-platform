@@ -1,12 +1,15 @@
 package dev.tugba.flight_ticket_platform.entities.concretes;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Collection;
+
+import dev.tugba.flight_ticket_platform.auth.config.constants.Role;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Document(collection = "userCollection")
-public class User {
+public class User implements UserDetails {
     @Id
     private String id;
 
@@ -40,8 +43,7 @@ public class User {
     @Field("password")
     private String password;
 
-    @Field("roles")
-    private List<String> roles;
+    private Role role;
 
     @Field("createdAt")
     private LocalDateTime createdAt;
@@ -49,6 +51,19 @@ public class User {
     @Field("updatedAt")
     private LocalDateTime updatedAt;
 
+    @Field("balance")
+    private int balance;
+
     @Field("gender")
     private String gender;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return role.getAuthorities();
+    }
+
+    @Override
+    public String getUsername() {
+        return turkishId;
+    }
 }
