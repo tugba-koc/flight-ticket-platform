@@ -14,5 +14,4 @@ public class LoginResponse {
         String token;
         int status;
         LocalDateTime datetime;
-        GetUserResponse userResponse;
 }

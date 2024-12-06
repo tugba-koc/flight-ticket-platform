@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.tugba.flight_ticket_platform.business.abstracts.AuthenticateService;
-import dev.tugba.flight_ticket_platform.business.requests.CreateUserRequest;
+import dev.tugba.flight_ticket_platform.business.requests.CreateRegisterRequest;
 import dev.tugba.flight_ticket_platform.business.requests.LoginRequest;
 import dev.tugba.flight_ticket_platform.business.responses.LoginResponse;
 import jakarta.validation.Valid;
@@ -23,8 +23,8 @@ public class AuthenticationController {
         
     @PostMapping("/register")
     @CrossOrigin(exposedHeaders = {"Access-Control-Allow-Origin","Access-Control-Allow-Credentials"})
-    public ResponseEntity<String> createUser(@RequestBody @Valid CreateUserRequest createUserRequest) {
-        return ResponseEntity.ok(this.authenticateService.createUser(createUserRequest));
+    public ResponseEntity<String> createUser(@RequestBody @Valid CreateRegisterRequest createRegisterRequest) {
+        return ResponseEntity.ok(this.authenticateService.createUser(createRegisterRequest));
     }
 
     @PostMapping("/login")

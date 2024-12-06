@@ -39,7 +39,7 @@ public class SecurityConfiguration {
         .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                 .requestMatchers("/api/v1/login").permitAll()
                 .requestMatchers("/api/v1/register").permitAll()
-                .requestMatchers("/api/v1/user").hasRole(Role.VISITOR.name())
+                .requestMatchers("/api/v1/user").permitAll()
                 .anyRequest()
                 .authenticated()
         )

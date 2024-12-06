@@ -8,11 +8,17 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.tugba.flight_ticket_platform.business.abstracts.UserService;
+import dev.tugba.flight_ticket_platform.business.requests.CreateRegisterRequest;
+import dev.tugba.flight_ticket_platform.business.requests.CreateUserResponse;
 import dev.tugba.flight_ticket_platform.entities.concretes.User;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @RestController
@@ -22,10 +28,10 @@ public class UserController {
 
     private UserService userService;
 
-    @GetMapping
-    @PreAuthorize("hasAuthority('visitor:read')")
+    @PostMapping
+    @PreAuthorize("hasAuthority('visitor:create')")
     @CrossOrigin(exposedHeaders = {"Access-Control-Allow-Origin","Access-Control-Allow-Credentials"})
-    public ResponseEntity<Optional<User>> getUserResponse(@RequestHeader("Authorization") String bearerToken) {
-        return ResponseEntity.ok(this.userService.getUserResponse(bearerToken));
+    public ResponseEntity<Optional<User>> getUserResponse(@RequestHeader("Authorization") String bearerToken, @RequestBody CreateUserResponse createUserResponse) {
+        return ResponseEntity.ok(userService.getUserResponse(bearerToken, createUserResponse));
     }
 }

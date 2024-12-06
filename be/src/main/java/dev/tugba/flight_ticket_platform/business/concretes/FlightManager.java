@@ -28,11 +28,11 @@ public class FlightManager implements FlightService {
         public GetAllFlightResponse  getAllFlight() {
                 List<Flight> flightList =  flightRepository.findAll();
                 GetAllFlightResponse getAllFlightResponse = GetAllFlightResponse.builder()
-                                .datetime(LocalDateTime.now())
-                                .flightDataList(flightList)
-                                .status(200)
-                                .requestId(UUID.randomUUID().toString())
-                                .build();
+                        .datetime(LocalDateTime.now())
+                        .flightDataList(flightList)
+                        .status(200)
+                        .requestId(UUID.randomUUID().toString())
+                        .build();
 
                         return getAllFlightResponse;
 
