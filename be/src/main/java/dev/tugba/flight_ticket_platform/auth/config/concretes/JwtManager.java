@@ -1,8 +1,13 @@
 package dev.tugba.flight_ticket_platform.auth.config.concretes;
 
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
+import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,22 +25,33 @@ import org.springframework.beans.factory.annotation.Value;
 
 @Service
 public class JwtManager implements JwtService {
-    @Value("${SECRET_KEY}")
-    private String secretKey;
+    private String secretKey = "";
+
+    public JwtManager() {
+        try {
+            KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
+            SecretKey sk = keyGen.generateKey();
+            secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("test >>> " + e);
+        }
+    }
 
     public String generateToken(User user) {
-        return Jwts
-            .builder()
-            .subject(user.getEmail())
-            .claim("userId", user.getId())
-            .issuedAt(new Date(System.currentTimeMillis()))
-            .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
-            .signWith(getSigninKey())
-            .compact();
+        Map<String, Object> claims = new HashMap<>();
+        return Jwts.builder()
+                .claims()
+                .add(claims)
+                .subject(user.getEmail())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 30))
+                .and()
+                .signWith(getSigninKey())
+                .compact();
     }
 
     private SecretKey getSigninKey() {
-        byte[] keyBytes=Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -69,19 +85,18 @@ public class JwtManager implements JwtService {
         }
     }
     
-    private <T> T extractClaim(String token, Function<Claims,T> claimsResolver)
-    {
-        final Claims claims=extractAllClaims(token);
-        return claimsResolver.apply(claims);
+    private <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimResolver.apply(claims);
     }
 
-    private Date getExpiration(String token)
+    private Date extractExpiration(String token)
     {
         return extractClaim(token, Claims::getExpiration);
     }
 
     public boolean isTokenExpired(String token)
     {
-        return getExpiration(token).before(new Date());
+        return extractExpiration(token).before(new Date());
     }
 }
