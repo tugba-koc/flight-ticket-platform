@@ -61,8 +61,6 @@ public class AuthenticateManager implements AuthenticateService {
                         }
                         String token = jwtService.generateToken(user);
 
-                        System.out.println("Token: " + token);
-
                         return LoginResponse.builder()
                                 .status(200)
                                 .token(token)

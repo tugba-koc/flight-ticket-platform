@@ -19,40 +19,29 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 
 @Service
 public class JwtManager implements JwtService {
-    private String secretKey = "";
-
-    public JwtManager() {
-        try {
-            KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
-            SecretKey sk = keyGen.generateKey();
-            secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("test >>> " + e);
-        }
-    }
+    @Value("${JWT_SECRET_KEY}")
+    private String jwtSecret;
 
     public String generateToken(User user) {
-        Map<String, Object> claims = new HashMap<>();
         return Jwts
-            .builder()
-            .claims()
-            .add(claims)
-            .subject(user.getEmail())
-            .issuedAt(new Date(System.currentTimeMillis()))
-            .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
-            .and()
-            .signWith(getSigninKey())
-            .compact();
+        .builder()
+        .setSubject(user.getEmail())
+        .claim("userId", user.getId())
+        .setIssuedAt(new Date(System.currentTimeMillis()))
+        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24 * 90))
+        .signWith(getSigninKey(),SignatureAlgorithm.HS256)
+        .compact();
     }
 
     private SecretKey getSigninKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -70,13 +59,16 @@ public class JwtManager implements JwtService {
     }
 
     private Claims extractAllClaims(String token) {
+        if(token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
         try {
             return Jwts
-                .parser()
-                .verifyWith(getSigninKey())
+                .parserBuilder()
+                .setSigningKey(getSigninKey())
                 .build()
-                .parseSignedClaims(token)
-                .getPayload();
+                .parseClaimsJws(token)
+                .getBody();
         } catch (MalformedJwtException e) {
             throw new RuntimeException("Invalid JWT format: " + e.getMessage(), e);
         } catch (ExpiredJwtException e) {

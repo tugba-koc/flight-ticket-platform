@@ -24,7 +24,6 @@ public class UserManager implements UserService {
         @Override
         public Optional<User> getUserResponse(String token, CreateUserResponse createUserResponse) {
                 String tokenJWT = jwtService.extractUsername(token);
-                System.out.println("tokenJWT: " + tokenJWT);
                 return userRepository.findByEmail(tokenJWT);
         }
 }
