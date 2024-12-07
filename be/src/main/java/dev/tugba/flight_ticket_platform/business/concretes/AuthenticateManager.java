@@ -1,8 +1,5 @@
 package dev.tugba.flight_ticket_platform.business.concretes;
 
-import java.sql.Date;
-import java.util.UUID;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
