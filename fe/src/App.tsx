@@ -1,35 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Route, Routes } from 'react-router';
+import './App.css';
+import AuthLayout from './layouts/AuthLayout/AuthLayout';
+import Registration from './components/Registration/Registration';
+import Login from './components/Login/Login';
+import Flights from './layouts/Flights/Flights';
+import Portal from './layouts/Portal/Portal';
+import PasswordChange from './components/PasswordChange/PasswordChange';
+import BalanceEdit from './components/BalanceEdit/BalanceEdit';
+import FlightTickets from './components/FlightTickets/FlightTickets';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Routes>
+      <Route path='/' element={<AuthLayout />}>
+        <Route index element={<Registration />} />
+        <Route path='login' element={<Login />} />
+      </Route>
+
+      <Route path='/flights' element={<Flights />}>
+        {/*         <Route index element={<Registration />} />
+        <Route path='login' element={<Login />} /> */}
+      </Route>
+
+      <Route path='/portal' element={<Portal />}>
+        <Route path='password-change' element={<PasswordChange />} />
+        <Route path='balance-edit' element={<BalanceEdit />} />
+        <Route path='flight-tickets' element={<FlightTickets />} />
+      </Route>
+    </Routes>
+  );
 }
 
-export default App
+export default App;
