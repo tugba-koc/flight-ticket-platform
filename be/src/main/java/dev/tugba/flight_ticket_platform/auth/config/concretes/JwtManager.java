@@ -39,15 +39,16 @@ public class JwtManager implements JwtService {
 
     public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
-        return Jwts.builder()
-                .claims()
-                .add(claims)
-                .subject(user.getEmail())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 30))
-                .and()
-                .signWith(getSigninKey())
-                .compact();
+        return Jwts
+            .builder()
+            .claims()
+            .add(claims)
+            .subject(user.getEmail())
+            .issuedAt(new Date(System.currentTimeMillis()))
+            .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
+            .and()
+            .signWith(getSigninKey())
+            .compact();
     }
 
     private SecretKey getSigninKey() {
