@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import dev.tugba.flight_ticket_platform.auth.config.abstracts.UserService;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.UserNotFoundException;
 import dev.tugba.flight_ticket_platform.dataAccess.abstracts.UserRepository;
-import dev.tugba.flight_ticket_platform.helper.Helper;
 import lombok.AllArgsConstructor;
 
 @Service("authUserManager")  // Bean adı burada da benzersiz

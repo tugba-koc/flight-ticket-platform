@@ -1,5 +1,6 @@
 package dev.tugba.flight_ticket_platform.business.concretes;
 
+import java.sql.Date;
 import java.util.UUID;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,7 +14,9 @@ import dev.tugba.flight_ticket_platform.business.abstracts.AuthenticateService;
 import dev.tugba.flight_ticket_platform.business.requests.CreateRegisterRequest;
 import dev.tugba.flight_ticket_platform.business.requests.LoginRequest;
 import dev.tugba.flight_ticket_platform.business.responses.LoginResponse;
+import dev.tugba.flight_ticket_platform.dataAccess.abstracts.TokenRepository;
 import dev.tugba.flight_ticket_platform.dataAccess.abstracts.UserRepository;
+import dev.tugba.flight_ticket_platform.entities.concretes.Token;
 import dev.tugba.flight_ticket_platform.entities.concretes.User;
 import lombok.AllArgsConstructor;
 
@@ -22,6 +25,7 @@ import lombok.AllArgsConstructor;
 public class AuthenticateManager implements AuthenticateService {
 
         private final UserRepository userRepository;
+        private final TokenRepository tokenRepository;
         private final PasswordEncoder passwordEncoder;
         private final JwtService jwtService;
         private final AuthenticationManager authenticationManager;
@@ -29,7 +33,6 @@ public class AuthenticateManager implements AuthenticateService {
         @Override
         public String createUser(CreateRegisterRequest createRegisterRequest) {
                 userRepository.save(User.builder()
-                        .id(UUID.randomUUID().toString())
                         .email(createRegisterRequest.getEmail())
                         .password(passwordEncoder.encode(createRegisterRequest.getPassword()))
                         .turkishId(createRegisterRequest.getTurkishId())
@@ -60,6 +63,18 @@ public class AuthenticateManager implements AuthenticateService {
                                 throw new RuntimeException("Accountcode and password are not matching.");
                         }
                         String token = jwtService.generateToken(user);
+
+                        if(tokenRepository.existsByUserId(user.getId())){
+                                tokenRepository.deleteByUserId(user.getId());
+                        }
+
+                        tokenRepository.save(Token.builder()
+                        .token(token)
+                        .userId(user.getId())
+                        .valid(true)
+                        .createdAt(java.time.LocalDateTime.now())
+                        .build()
+                        );
 
                         return LoginResponse.builder()
                                 .status(200)
