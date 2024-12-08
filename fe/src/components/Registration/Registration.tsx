@@ -19,7 +19,7 @@ const Registration = () => {
     gender: '',
   });
 
-  const { data: registerData, refetch } = useRegister(formData);
+  const { data: registerData, register } = useRegister(formData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,7 +31,7 @@ const Registration = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    refetch();
+    register();
   };
 
   useEffect(() => {
