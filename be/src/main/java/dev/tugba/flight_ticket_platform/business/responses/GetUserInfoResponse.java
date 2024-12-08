@@ -9,12 +9,11 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-public class GetUserResponse {
+public class GetUserInfoResponse {
     private String email;
     private String name;
     private String surname;
     private String phoneNumber;
-    private int status;
+    private int balance;
     private LocalDateTime datetime;
-    private String requestId;
 }

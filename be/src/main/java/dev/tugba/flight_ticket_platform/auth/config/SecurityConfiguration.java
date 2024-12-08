@@ -37,10 +37,11 @@ public class SecurityConfiguration {
         http
         .csrf(customizer -> customizer.disable())
         .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+                .requestMatchers("/api/v1/user/deposit").permitAll()
+                .requestMatchers("/api/v1/user/info").permitAll()
                 .requestMatchers("/api/v1/auth/login").permitAll()
                 .requestMatchers("/api/v1/auth/register").permitAll()
                 .requestMatchers("/api/v1/auth/reset-password").permitAll()
-                .requestMatchers("/api/v1/auth/user/deposit").permitAll()
                 .requestMatchers("/api/v1/user").hasRole(Role.VISITOR.name())
                 .anyRequest()
                 .authenticated()

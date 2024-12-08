@@ -11,7 +11,7 @@ const Login = () => {
     password: '',
   });
 
-  const { data: loginData, refetch, error: errorLogin } = useLogin(formData);
+  const { data: loginData, login, error: errorLogin } = useLogin(formData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,7 +23,7 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    refetch();
+    login();
   };
   console.log('loginData', loginData);
   console.log('errorLogin', errorLogin);

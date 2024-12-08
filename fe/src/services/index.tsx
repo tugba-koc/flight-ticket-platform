@@ -33,7 +33,7 @@ export const fetchResetPassword = async (body) => {
 };
 
 export const fetchDeposit = async (amount) => {
-  const url = `${import.meta.env.VITE_BASE_URL}/api/v1/auth/user/deposit`;
+  const url = `${import.meta.env.VITE_BASE_URL}/api/v1/user/deposit`;
   const data = {
     amount,
     requestId: uuid4(),

@@ -15,6 +15,7 @@ import dev.tugba.flight_ticket_platform.business.requests.CreateRegisterRequest;
 import dev.tugba.flight_ticket_platform.business.requests.LoginRequest;
 import dev.tugba.flight_ticket_platform.business.requests.UpdatePassword;
 import dev.tugba.flight_ticket_platform.business.responses.LoginResponse;
+import dev.tugba.flight_ticket_platform.core.utilities.exceptions.AlreadyExistsUserException;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.AuthenticationServiceException;
 import dev.tugba.flight_ticket_platform.dataAccess.abstracts.TokenRepository;
 import dev.tugba.flight_ticket_platform.dataAccess.abstracts.UserRepository;
@@ -34,7 +35,10 @@ public class AuthenticateManager implements AuthenticateService {
 
         @Override
         public String createUser(CreateRegisterRequest createRegisterRequest) {
-                userRepository.save(User.builder()
+                if (userRepository.existsByEmail(createRegisterRequest.getEmail())) {
+                        throw new AlreadyExistsUserException("the user already exists");
+                } else {
+                        userRepository.save(User.builder()
                         .email(createRegisterRequest.getEmail())
                         .password(passwordEncoder.encode(createRegisterRequest.getPassword()))
                         .turkishId(createRegisterRequest.getTurkishId())
@@ -46,8 +50,11 @@ public class AuthenticateManager implements AuthenticateService {
                         .createdAt(java.time.LocalDateTime.now())
                         .updatedAt(java.time.LocalDateTime.now())
                         .build());
-                String ok = "ok";
-                return ok;
+                        
+                        String ok = "ok";
+                        return ok;
+                }
+                
         }
 
         @Override
@@ -89,12 +96,6 @@ public class AuthenticateManager implements AuthenticateService {
                 } else {
 
                         throw new AuthenticationServiceException("Accountcode and password are not matching.");
-                        // TODO: status code should be taken from enum
-                        /* return LoginResponse.builder()
-                                .token(null)
-                                .status(422)
-                                .datetime(java.time.LocalDateTime.now())
-                                .build(); */
                 }
         }
 
