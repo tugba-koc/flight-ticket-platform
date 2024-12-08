@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
+import { useDeposit } from '../../hooks/useDeposit';
 
 const BalanceEdit = () => {
-  const [balance, setBalance] = useState(100); // Varsayılan bakiye
-  const [newBalance, setNewBalance] = useState(''); // Input için geçici değer
-  const [error, setError] = useState(''); // Hata mesajı
+  const [balance, setBalance] = useState(100);
+  const [newBalance, setNewBalance] = useState('');
+  const [error, setError] = useState('');
+
+  const {
+    data: depositData,
+    deposit,
+    error: errorDeposit,
+  } = useDeposit(balance);
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -28,6 +35,7 @@ const BalanceEdit = () => {
     if (numericValue > 99999) {
       setError('Value exceeds the maximum limit (5 digits).');
     } else {
+      deposit();
       setBalance(numericValue);
       setNewBalance('');
       setError('');

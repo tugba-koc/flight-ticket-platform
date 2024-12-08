@@ -25,9 +25,11 @@ const Login = () => {
     e.preventDefault();
     refetch();
   };
+  console.log('loginData', loginData);
+  console.log('errorLogin', errorLogin);
 
   useEffect(() => {
-    if (loginData) {
+    if (loginData?.token !== null && loginData?.token !== undefined) {
       localStorage.setItem('token', loginData.token);
       navigate('/flights');
     }

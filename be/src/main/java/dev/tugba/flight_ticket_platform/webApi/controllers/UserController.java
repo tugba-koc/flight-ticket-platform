@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.tugba.flight_ticket_platform.business.abstracts.UserService;
+import dev.tugba.flight_ticket_platform.business.requests.CreateDepositRequest;
 import dev.tugba.flight_ticket_platform.business.requests.CreateRegisterRequest;
 import dev.tugba.flight_ticket_platform.business.requests.CreateUserResponse;
+import dev.tugba.flight_ticket_platform.business.responses.GetDepositResponse;
 import dev.tugba.flight_ticket_platform.entities.concretes.User;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +29,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class UserController {
 
     private UserService userService;
+
+    @PostMapping("/deposit")
+    @PreAuthorize("hasAuthority('visitor:create')")
+    @CrossOrigin(exposedHeaders = {"Access-Control-Allow-Origin","Access-Control-Allow-Credentials"})
+    public ResponseEntity<GetDepositResponse> deposit(@RequestHeader("Authorization") String bearerToken, @RequestBody CreateDepositRequest createDepositRequest) {
+        return ResponseEntity.ok(userService.deposit(bearerToken, createDepositRequest));
+    }
 
     @PostMapping
     @PreAuthorize("hasAuthority('visitor:create')")

@@ -1,18 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useResetPassword } from '../../hooks/useResetPassword';
 
 const PasswordChange = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
 
+  const {
+    data: resetPasswordData,
+    refetch,
+    error: errorResetPassword,
+  } = useResetPassword({ password, confirmPassword });
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password === confirmPassword) {
       setMessage('Password changed successfully!');
+      refetch();
     } else {
       setMessage('Passwords do not match.');
     }
   };
+
+  useEffect(() => {
+    setConfirmPassword('');
+    setPassword('');
+  }, [resetPasswordData]);
 
   return (
     <div>
