@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document(collection = "flightTicketPlatformCollection")
+@Document(collection = "flightCollection")
 public class Flight {
     @Id
     private String id;

@@ -9,4 +9,5 @@ import dev.tugba.flight_ticket_platform.entities.concretes.Token;
 public interface TokenRepository extends MongoRepository<Token, String>  {
         boolean existsByUserId(String userId);
         Optional<Token> deleteByUserId(String userId);
+        Optional<Token> findByToken(String accessToken);
 }

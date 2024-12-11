@@ -6,17 +6,16 @@ const PasswordChange = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
 
-  const {
-    data: resetPasswordData,
-    refetch,
-    error: errorResetPassword,
-  } = useResetPassword({ password, confirmPassword });
+  const { data: resetPasswordData, resetPassword } = useResetPassword({
+    password,
+    confirmPassword,
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password === confirmPassword) {
       setMessage('Password changed successfully!');
-      refetch();
+      resetPassword();
     } else {
       setMessage('Passwords do not match.');
     }

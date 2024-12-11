@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.tugba.flight_ticket_platform.business.abstracts.UserService;
 import dev.tugba.flight_ticket_platform.business.requests.CreateDepositRequest;
-import dev.tugba.flight_ticket_platform.business.requests.CreateUserInfoRequest;
 import dev.tugba.flight_ticket_platform.business.requests.CreateUserResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetDepositResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetUserInfoResponse;
@@ -41,8 +40,8 @@ public class UserController {
     @GetMapping("/info")
     @PreAuthorize("hasAuthority('visitor:read')")
     @CrossOrigin(exposedHeaders = {"Access-Control-Allow-Origin","Access-Control-Allow-Credentials"})
-    public ResponseEntity<GetUserInfoResponse> getUserInfo(@RequestHeader("Authorization") String bearerToken, @RequestParam CreateUserInfoRequest createUserInfoRequest) {
-        return ResponseEntity.ok(userService.getUserInfo(bearerToken, createUserInfoRequest));
+    public ResponseEntity<GetUserInfoResponse> getUserInfo(@RequestHeader("Authorization") String bearerToken, @RequestParam String requestId) {
+        return ResponseEntity.ok(userService.getUserInfo(bearerToken, requestId));
     }
 
     @PostMapping

@@ -7,7 +7,11 @@ const BalanceEdit = () => {
   const [newBalance, setNewBalance] = useState('');
   const [error, setError] = useState('');
 
-  const { data: depositData, deposit, error } = useDeposit(newBalance);
+  const {
+    data: depositData,
+    deposit,
+    error: errorDeposit,
+  } = useDeposit(newBalance);
 
   const handleInputChange = (e) => {
     const value = e.target.value;

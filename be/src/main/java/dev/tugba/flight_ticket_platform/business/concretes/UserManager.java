@@ -12,7 +12,6 @@ import dev.tugba.flight_ticket_platform.auth.config.abstracts.JwtService;
 import dev.tugba.flight_ticket_platform.business.abstracts.UserService;
 import dev.tugba.flight_ticket_platform.business.requests.CreateDepositRequest;
 import dev.tugba.flight_ticket_platform.business.requests.CreateRegisterRequest;
-import dev.tugba.flight_ticket_platform.business.requests.CreateUserInfoRequest;
 import dev.tugba.flight_ticket_platform.business.requests.CreateUserResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetDepositResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetUserInfoResponse;
@@ -47,7 +46,7 @@ public class UserManager implements UserService {
         }
 
         @Override
-        public GetUserInfoResponse getUserInfo(String bearerToken, CreateUserInfoRequest createUserInfoRequest) {
+        public GetUserInfoResponse getUserInfo(String bearerToken, String requestId) {
                 String userEmail = jwtService.extractUsername(bearerToken);
                 User user = userRepository.findByEmail(userEmail).orElseThrow(()-> new UserNotFoundException("User not found"));
                 return GetUserInfoResponse.builder()

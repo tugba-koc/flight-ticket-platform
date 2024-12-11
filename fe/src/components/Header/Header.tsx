@@ -1,8 +1,27 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router';
 import './header.css';
+import { useUserInfo } from '../../hooks/useUserInfo';
+import { useLogout } from '../../hooks/useLogout';
 
 const Header = () => {
+  const navigate = useNavigate();
+  const { data, isLoading } = useUserInfo();
+  const { data: logoutData, logout, isSuccess } = useLogout();
+
+  const logoutHandler = () => {
+    logout();
+  };
+
+  console.log('logoutData', logoutData);
+
+  useEffect(() => {
+    if (logoutData && isSuccess) {
+      localStorage.removeItem('token');
+      navigate('/login');
+    }
+  }, [logoutData, isSuccess, navigate]);
+
   return (
     <div className='row'>
       <img
@@ -12,7 +31,12 @@ const Header = () => {
         alt=''
       />
 
-      <Link to='/portal'>My Portal</Link>
+      <div className='right-side'>
+        {' '}
+        <p>{data?.balance}$</p>
+        <Link to='/portal'>My Portal</Link>
+        <p onClick={logoutHandler}>logout</p>
+      </div>
     </div>
   );
 };

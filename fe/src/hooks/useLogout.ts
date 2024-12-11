@@ -1,10 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
-import { fetchResetPassword } from '../services';
+import { fetchLogout } from '../services';
 
-export const useResetPassword = (data) => {
+export const useLogout = () => {
   const mutation = useMutation({
     mutationFn: async () => {
-      const result = await fetchResetPassword(data);
+      const result = await fetchLogout();
       return result;
     },
     retry: false,
@@ -12,8 +12,9 @@ export const useResetPassword = (data) => {
 
   return {
     data: mutation.data,
-    resetPassword: mutation.mutate,
+    logout: mutation.mutate,
     isLoading: mutation.isLoading,
     error: mutation.error,
+    isSuccess: mutation.isSuccess,
   };
 };

@@ -18,6 +18,6 @@ public class FlightsController {
 
     @GetMapping
     public ResponseEntity<GetAllFlightResponse> getAllFlight() {
-        return ResponseEntity.ok(this.flightService.getAllFlight());
+        return ResponseEntity.ok(flightService.getAllFlight());
     }
 }
