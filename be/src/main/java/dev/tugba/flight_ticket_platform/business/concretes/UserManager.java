@@ -2,16 +2,13 @@ package dev.tugba.flight_ticket_platform.business.concretes;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
 import org.springframework.stereotype.Service;
 
 import dev.tugba.flight_ticket_platform.auth.config.abstracts.JwtService;
 import dev.tugba.flight_ticket_platform.business.abstracts.UserService;
 import dev.tugba.flight_ticket_platform.business.requests.CreateDepositRequest;
-import dev.tugba.flight_ticket_platform.business.requests.CreateRegisterRequest;
 import dev.tugba.flight_ticket_platform.business.requests.CreateUserResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetDepositResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetUserInfoResponse;

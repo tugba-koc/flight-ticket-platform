@@ -27,6 +27,12 @@ public class Flight {
     @Field("arrivalCity")
     private String arrivalCity;
 
+    @Field("company")
+    private String company;
+
+    @Field("departureTime")
+    private String departureTime;
+
     @Field("price")
     private Double price;
 }

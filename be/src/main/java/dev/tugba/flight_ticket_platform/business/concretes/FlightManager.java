@@ -4,16 +4,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import dev.tugba.flight_ticket_platform.auth.config.abstracts.JwtService;
 import dev.tugba.flight_ticket_platform.business.abstracts.FlightService;
 import dev.tugba.flight_ticket_platform.business.responses.GetAllFlightResponse;
+import dev.tugba.flight_ticket_platform.business.responses.GetSearchFlights;
 import dev.tugba.flight_ticket_platform.dataAccess.abstracts.FlightRepository;
 import dev.tugba.flight_ticket_platform.entities.concretes.Flight;
 import lombok.AllArgsConstructor;
@@ -21,6 +17,8 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class FlightManager implements FlightService {
+
+        private JwtService jwtService;
 
         private final FlightRepository flightRepository;
 
@@ -36,6 +34,26 @@ public class FlightManager implements FlightService {
 
                         return getAllFlightResponse;
 
+        }
+
+/*         private String flightNumber;
+        private String departureCity;
+        private String arrivalCity;
+        private Double price; */
+
+        @Override
+        public List<GetSearchFlights> searchFlights(String requestId, String departureCity, String arrivalCity) {
+                 List<Flight> flightList = flightRepository.findByDepartureCityAndArrivalCity(departureCity, arrivalCity);
+                 List<GetSearchFlights> getSearchFlights = flightList.stream().map(flight ->  
+                        GetSearchFlights.builder()
+                                .departureCity(flight.getDepartureCity())
+                                .arrivalCity(flight.getArrivalCity())
+                                .flightNumber(flight.getFlightNumber())
+                                .company(flight.getCompany())
+                                .departureTime(flight.getDepartureTime())
+                                .price(flight.getPrice()).build())
+                                        .toList();
+                return getSearchFlights;
         }
         
 }
