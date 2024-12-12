@@ -1,14 +1,12 @@
 package dev.tugba.flight_ticket_platform.business.abstracts;
 
-
+import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.web.bind.annotation.RequestHeader;
-
 import dev.tugba.flight_ticket_platform.business.responses.GetAllFlightResponse;
-import dev.tugba.flight_ticket_platform.business.responses.GetSearchFlights;
+import dev.tugba.flight_ticket_platform.business.responses.GetFilterFlightResponse;
 
 public interface FlightService {
-        GetAllFlightResponse getAllFlight(); 
-        List<GetSearchFlights> searchFlights(String requestId, String departureCity, String arrivalCity);
+        GetAllFlightResponse getAllFlight(String requestId); 
+        GetFilterFlightResponse searchFlights(String requestId, String departureCity, String arrivalCity, String departureDay);
 }

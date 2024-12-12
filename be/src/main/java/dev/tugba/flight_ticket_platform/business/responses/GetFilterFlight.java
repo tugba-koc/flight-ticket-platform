@@ -7,11 +7,12 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-public class GetSearchFlights {
+public class GetFilterFlight {
         private String flightNumber;
         private String departureCity;
         private String arrivalCity;
         private Double price;
         private String company;
-        private String departureTime;
+        private String departureDay;
+        private String departureHour;
 }

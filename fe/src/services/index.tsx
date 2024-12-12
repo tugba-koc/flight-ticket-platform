@@ -74,3 +74,25 @@ export const fetchLogout = async () => {
   });
   return res.data;
 };
+
+export const fetchFlightAll = async () => {
+  const requestId = uuid4();
+  const url = `${
+    import.meta.env.VITE_BASE_URL
+  }/api/v1/flights/all?requestId=${requestId}`;
+  const res = await instanceGet.get(url);
+  return res.data;
+};
+
+export const fetchFilterFlight = async (
+  departureCity,
+  arrivalCity,
+  departureDay
+) => {
+  const requestId = uuid4();
+  const url = `${
+    import.meta.env.VITE_BASE_URL
+  }/api/v1/flights/search?requestId=${requestId}&departureCity=${departureCity}&arrivalCity=${arrivalCity}&departureDay=${departureDay}`;
+  const res = await instanceGet.get(url);
+  return res.data;
+};

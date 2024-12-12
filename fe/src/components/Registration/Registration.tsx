@@ -42,7 +42,7 @@ const Registration = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form id='registration' onSubmit={handleSubmit}>
         <div>
           <input
             type='text'

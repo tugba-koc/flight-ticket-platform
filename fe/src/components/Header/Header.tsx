@@ -13,8 +13,6 @@ const Header = () => {
     logout();
   };
 
-  console.log('logoutData', logoutData);
-
   useEffect(() => {
     if (logoutData && isSuccess) {
       localStorage.removeItem('token');

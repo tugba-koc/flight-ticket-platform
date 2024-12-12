@@ -30,8 +30,11 @@ public class Flight {
     @Field("company")
     private String company;
 
-    @Field("departureTime")
-    private String departureTime;
+    @Field("departureDay")
+    private String departureDay;
+
+    @Field("departureHour")
+    private String departureHour;
 
     @Field("price")
     private Double price;

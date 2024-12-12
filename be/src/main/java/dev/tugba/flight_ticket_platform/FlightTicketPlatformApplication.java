@@ -17,5 +17,4 @@ public class FlightTicketPlatformApplication {
 	public ModelMapper getModelMapper() {
 		return new ModelMapper();
 	}
-
 }

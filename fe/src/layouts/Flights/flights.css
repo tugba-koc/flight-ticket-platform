@@ -1,0 +1,19 @@
+.flights {
+  display: flex;
+  flex-direction: column;
+}
+
+.flightCard {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  gap: 50px;
+  padding: 10px;
+}
+
+#flights-main {
+  width: 80%;
+  margin: 0 auto;
+}

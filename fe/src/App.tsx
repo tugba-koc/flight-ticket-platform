@@ -17,10 +17,7 @@ function App() {
         <Route path='login' element={<Login />} />
       </Route>
 
-      <Route path='/flights' element={<Flights />}>
-        {/*         <Route index element={<Registration />} />
-        <Route path='login' element={<Login />} /> */}
-      </Route>
+      <Route path='/flights' element={<Flights />} />
 
       <Route path='/portal' element={<Portal />}>
         <Route path='password-change' element={<PasswordChange />} />

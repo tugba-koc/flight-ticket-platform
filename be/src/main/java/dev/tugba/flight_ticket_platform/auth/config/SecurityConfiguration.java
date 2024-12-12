@@ -42,7 +42,6 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
     
         http
             .cors(cors -> cors
@@ -63,6 +62,8 @@ public class SecurityConfiguration {
                 .requestMatchers("/api/v1/auth/login").permitAll()
                 .requestMatchers("/api/v1/auth/register").permitAll()
                 .requestMatchers("/api/v1/auth/reset-password").permitAll()
+                .requestMatchers("/api/v1/flights/all").permitAll()
+                .requestMatchers("/api/v1/flights/search").permitAll()
                 .requestMatchers("/api/v1/user").hasRole(Role.VISITOR.name())
                 .anyRequest().authenticated()
             )
@@ -77,8 +78,6 @@ public class SecurityConfiguration {
                         SecurityContextHolder.clearContext();
                     }));
 
-
-    
         return http.build();
     }
 

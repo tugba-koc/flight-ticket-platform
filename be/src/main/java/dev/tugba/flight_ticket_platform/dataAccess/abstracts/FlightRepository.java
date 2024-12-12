@@ -7,5 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import dev.tugba.flight_ticket_platform.entities.concretes.Flight;
 
 public interface FlightRepository extends MongoRepository<Flight, String> {
-        List<Flight> findByDepartureCityAndArrivalCity(String departureCity, String arrivalCity);
+        List<Flight> findByDepartureCityAndArrivalCityAndDepartureDay(String departureCity, String arrivalCity, String departureDay);
 }

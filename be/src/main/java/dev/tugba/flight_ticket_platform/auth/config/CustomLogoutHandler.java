@@ -3,7 +3,6 @@ package dev.tugba.flight_ticket_platform.auth.config;
 import java.io.IOException;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 

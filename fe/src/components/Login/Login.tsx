@@ -25,8 +25,6 @@ const Login = () => {
     e.preventDefault();
     login();
   };
-  console.log('loginData', loginData);
-  console.log('errorLogin', errorLogin);
 
   useEffect(() => {
     if (loginData?.token !== null && loginData?.token !== undefined) {
@@ -37,7 +35,7 @@ const Login = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form id='login' onSubmit={handleSubmit}>
         <div>
           <input
             type='email'

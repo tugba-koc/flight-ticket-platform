@@ -54,7 +54,6 @@ public class AuthenticateManager implements AuthenticateService {
                         String ok = "ok";
                         return ok;
                 }
-                
         }
 
         @Override
