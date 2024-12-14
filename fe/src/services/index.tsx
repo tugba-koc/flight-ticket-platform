@@ -54,12 +54,18 @@ export const fetchUserInfo = async () => {
   const url = `${
     import.meta.env.VITE_BASE_URL
   }/api/v1/user/info?requestId=${requestId}`;
-  const res = await instanceGet.get(url, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-    },
-  });
-  return res.data;
+
+  try {
+    const res = await instanceGet.get(url, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.log('error 2 ==> ', error);
+    throw error;
+  }
 };
 
 export const fetchLogout = async () => {

@@ -15,6 +15,23 @@ export const instancePost = axios.create({
   timeout: timeoutValue,
 });
 
+instanceGet.interceptors.request.use(async (config) => {
+  return config;
+});
+
+instanceGet.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  function (error) {
+    const standardizedError = {
+      message: error.message,
+      status: error.response?.status,
+    };
+    return Promise.reject(standardizedError);
+  }
+);
+
 instancePost.interceptors.request.use(async (config) => {
   return config;
 });
@@ -24,6 +41,10 @@ instancePost.interceptors.response.use(
     return response;
   },
   function (error) {
-    return Promise.reject(error);
+    const standardizedError = {
+      message: error.message,
+      status: error.response?.status,
+    };
+    return Promise.reject(standardizedError);
   }
 );

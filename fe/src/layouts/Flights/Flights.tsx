@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '../../components/Header/Header';
 import { useFlightAll } from '../../hooks/useFlightAll';
 import './flights.css';
 import FlightList from '../../components/FlightList/FlightList';
 import FlightFilter from '../../components/FlightFilter/FlightFilter';
+import { useFilterFlight } from '../../hooks/useFilterFlight';
 
 const Flights = () => {
+  const [filters, setFilters] = useState({
+    departureCity: '',
+    arrivalCity: '',
+    date: '',
+    maxPrice: '',
+  });
+
   const {
     data: allFlightData,
     refetch,
@@ -14,7 +22,11 @@ const Flights = () => {
     isSuccess,
   } = useFlightAll();
 
-  console.log('allFlightData >>> ', allFlightData);
+  const { refetch: callFilterFlight, data: filterFlight } = useFilterFlight({
+    departureCity: filters.departureCity,
+    arrivalCity: filters.arrivalCity,
+    departureDay: filters.date,
+  });
 
   return (
     <>
@@ -22,13 +34,21 @@ const Flights = () => {
       <h2>Flights</h2>
       <div id='flights-main'>
         <aside>
-          <FlightFilter />
+          <FlightFilter
+            filters={filters}
+            setFilters={setFilters}
+            refetch={callFilterFlight}
+          />
         </aside>
-        {isSuccess && allFlightData && (
+        {isSuccess && (filterFlight || allFlightData) && (
           <div className='flights'>
-            {allFlightData?.flightDataList.map((flight) => (
-              <FlightList flight={flight} key={flight.id} />
-            ))}
+            {filterFlight?.filterFlightDataList?.length > 0
+              ? filterFlight?.filterFlightDataList.map((flight) => (
+                  <FlightList flight={flight} key={flight.id} />
+                ))
+              : allFlightData?.flightDataList.map((flight) => (
+                  <FlightList flight={flight} key={flight.id} />
+                ))}
           </div>
         )}
       </div>

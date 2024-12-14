@@ -1,23 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './flightFilter.css';
-import { useFilterFlight } from '../../hooks/useFilterFlight';
 
-const FlightFilter = () => {
-  const [filters, setFilters] = useState({
-    departureCity: '',
-    arrivalCity: '',
-    date: '',
-    maxPrice: '',
-  });
+const cities = ['İstanbul', 'Ankara', 'İzmir', 'Erzurum', 'Trabzon'];
 
-  const { refetch } = useFilterFlight({
-    departureCity: filters.departureCity,
-    arrivalCity: filters.arrivalCity,
-    departureDay: filters.date,
-  });
-
-  const cities = ['İstanbul', 'Ankara', 'İzmir', 'Erzurum', 'Trabzon'];
-
+const FlightFilter = ({ setFilters, filters, refetch }) => {
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters({ ...filters, [name]: value });
@@ -25,12 +11,14 @@ const FlightFilter = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('filter tetiklendi');
     refetch();
   };
 
   return (
     <form id='formFilter' onSubmit={handleSubmit}>
       <div>
+        <span>From</span>
         <select
           name='departureCity'
           value={filters.departureCity}
@@ -45,6 +33,7 @@ const FlightFilter = () => {
         </select>
       </div>
       <div>
+        <span>To</span>
         <select
           name='arrivalCity'
           value={filters.arrivalCity}
@@ -59,21 +48,13 @@ const FlightFilter = () => {
         </select>
       </div>
       <div>
+        <span>Date</span>
         <input
           type='date'
           name='date'
           value={filters.date}
           onChange={handleFilterChange}
           placeholder='Tarih'
-        />
-      </div>
-      <div>
-        <input
-          type='number'
-          name='maxPrice'
-          value={filters.maxPrice}
-          onChange={handleFilterChange}
-          placeholder='Maksimum Fiyat'
         />
       </div>
       <button type='submit'>Filtrele</button>

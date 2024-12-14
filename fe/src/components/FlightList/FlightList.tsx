@@ -7,6 +7,7 @@ const FlightList = ({ flight, key }) => {
       <p>to: {flight?.arrivalCity}</p>
       <p>company: {flight?.company}</p>
       <p>price: {flight?.price}</p>
+      <button>Purchase</button>
     </div>
   );
 };
