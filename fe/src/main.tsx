@@ -14,16 +14,16 @@ const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error) => {
       if (error?.status === 403) {
-        localStorage.clear();
-        window.location.href = '/login';
+        /*         localStorage.clear();
+        window.location.href = '/login'; */
       }
     },
   }),
   mutationCache: new MutationCache({
     onError: (error) => {
       if (error?.status === 403) {
-        localStorage.clear();
-        window.location.href = '/login';
+        /*         localStorage.clear();
+        window.location.href = '/login'; */
       }
     },
   }),

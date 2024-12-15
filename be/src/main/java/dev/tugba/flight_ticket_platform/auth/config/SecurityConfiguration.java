@@ -58,14 +58,14 @@ public class SecurityConfiguration {
                 }))
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                .requestMatchers("/api/v1/user/deposit").hasAnyAuthority(Permission.VISITOR_UPDATE.getPermission())
-                .requestMatchers("/api/v1/user/info").permitAll() // need to add hasAnyAuthority
+                .requestMatchers("/api/v1/user/deposit").hasAnyAuthority(Permission.VISITOR_UPDATE.name())
+                .requestMatchers("/api/v1/user/info").hasAnyAuthority(Permission.VISITOR_READ.name(), Permission.ADMIN_READ.name())
                 .requestMatchers("/api/v1/auth/login").permitAll()
                 .requestMatchers("/api/v1/auth/register").permitAll()
-                .requestMatchers("/api/v1/auth/reset-password").permitAll() // need to add hasAnyAuthority
+                .requestMatchers("/api/v1/auth/reset-password").permitAll()
                 .requestMatchers("/api/v1/flights/all").permitAll()
                 .requestMatchers("/api/v1/flights/search").permitAll()
-                .requestMatchers("/api/v1/flight/sell").hasAnyAuthority(Permission.VISITOR_UPDATE.getPermission())
+                .requestMatchers("/api/v1/flight/sell").hasAnyAuthority(Permission.VISITOR_UPDATE.name())
                 .requestMatchers("/api/v1/user").hasRole(Role.VISITOR.name())
                 .anyRequest().authenticated()
             )

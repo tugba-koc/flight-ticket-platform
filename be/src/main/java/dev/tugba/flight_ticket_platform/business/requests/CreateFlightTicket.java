@@ -15,4 +15,5 @@ public class CreateFlightTicket {
         private String departureDay;
         private String departureHour;
         private Double price;
+        private String requestId;
 }

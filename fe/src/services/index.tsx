@@ -119,3 +119,20 @@ export const fetchFlightTicket = async (flightId) => {
   });
   return res.data;
 };
+
+export const fetchAddFlight = async (flight) => {
+  const url = `${import.meta.env.VITE_BASE_URL}/api/v1/flight/add`;
+  const data = {
+    ...flight,
+    requestId: uuid4(),
+  };
+
+  const token = localStorage.getItem('token');
+
+  const res = await instancePost.post(url, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};

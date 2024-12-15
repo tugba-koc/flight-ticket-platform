@@ -13,6 +13,10 @@ const Header = () => {
     logout();
   };
 
+  const addFlight = () => {
+    navigate('/add-flight');
+  };
+
   useEffect(() => {
     if (logoutData && isSuccess) {
       localStorage.removeItem('token');
@@ -30,7 +34,7 @@ const Header = () => {
       />
 
       <div className='right-side'>
-        {' '}
+        <p onClick={addFlight}>Add Flight</p>
         <p>{data?.balance}$</p>
         <Link to='/portal'>My Portal</Link>
         <p onClick={logoutHandler}>logout</p>

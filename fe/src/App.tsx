@@ -8,6 +8,7 @@ import Portal from './layouts/Portal/Portal';
 import PasswordChange from './components/PasswordChange/PasswordChange';
 import BalanceEdit from './components/BalanceEdit/BalanceEdit';
 import FlightTickets from './components/FlightTickets/FlightTickets';
+import AddFlight from './layouts/AddFlight/AddFlight';
 
 function App() {
   return (
@@ -24,6 +25,10 @@ function App() {
         <Route path='balance-edit' element={<BalanceEdit />} />
         <Route path='flight-tickets' element={<FlightTickets />} />
       </Route>
+
+      <Route path='/add-flight' element={<AddFlight />} />
+
+      <Route path='*' element={<h1>Not Found</h1>} />
     </Routes>
   );
 }

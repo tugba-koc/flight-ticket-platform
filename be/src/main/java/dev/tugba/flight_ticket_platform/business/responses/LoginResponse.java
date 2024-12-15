@@ -12,7 +12,8 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class LoginResponse {
-        String token;
-        int status;
-        LocalDateTime datetime;
+        private String token;
+        private int status;
+        private LocalDateTime datetime;
+        private String role;
 }

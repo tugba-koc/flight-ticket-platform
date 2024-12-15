@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.tugba.flight_ticket_platform.business.abstracts.FlightService;
+import dev.tugba.flight_ticket_platform.business.requests.CreateFlightTicket;
 import dev.tugba.flight_ticket_platform.business.requests.SellFlightRequest;
 import dev.tugba.flight_ticket_platform.business.requests.UpdatePassword;
 import dev.tugba.flight_ticket_platform.business.responses.GetAllFlightResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetFilterFlightResponse;
+import dev.tugba.flight_ticket_platform.business.responses.GetFlightTicketResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetSellFlightResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -43,6 +45,12 @@ public class FlightsController {
     @PreAuthorize("hasAuthority('visitor:update')")
     public ResponseEntity<GetSellFlightResponse> sellFlight(@RequestHeader("Authorization") String token,  @RequestBody @Valid SellFlightRequest sellFlightRequest) {
         return ResponseEntity.ok(flightService.sellFlight(token, sellFlightRequest));
+    }
+
+    @PostMapping("/flight/add")
+    @PreAuthorize("hasAuthority('admin:create')")
+    public ResponseEntity<GetFlightTicketResponse> addFlight(@RequestHeader("Authorization") String token,  @RequestBody @Valid CreateFlightTicket createFlightTicket) {
+        return ResponseEntity.ok(flightService.addFlight(token, createFlightTicket));
     }
     
 }

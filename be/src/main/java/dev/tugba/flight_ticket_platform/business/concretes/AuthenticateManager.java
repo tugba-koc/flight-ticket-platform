@@ -46,7 +46,7 @@ public class AuthenticateManager implements AuthenticateService {
                         .name(createRegisterRequest.getName())
                         .surname(createRegisterRequest.getSurname())
                         .phoneNumber(createRegisterRequest.getPhoneNumber())
-                        .role(createRegisterRequest.getRole().toString() == "ADMIN" ? Role.ADMIN: Role.VISITOR)
+                        .role(createRegisterRequest.getRole().toString() == "admin" ? Role.ADMIN: Role.VISITOR)
                         .gender(createRegisterRequest.getGender())
                         .createdAt(java.time.LocalDateTime.now())
                         .updatedAt(java.time.LocalDateTime.now())
@@ -60,7 +60,7 @@ public class AuthenticateManager implements AuthenticateService {
         @Override
         public LoginResponse login(LoginRequest loginRequest) {
                 User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
-
+                System.out.println("Permission.VISITOR_READ.name()  >> " + Permission.VISITOR_READ.name());
                 
                 if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
                         try {
@@ -86,12 +86,14 @@ public class AuthenticateManager implements AuthenticateService {
                                 .createdAt(java.time.LocalDateTime.now())
                                 .build()
                                 );
-                        
+
+                        String role = user.getRole() == Role.ADMIN ? "ADMIN" : "VISITOR";
 
                         return LoginResponse.builder()
                                 .status(200)
                                 .token(token)
                                 .datetime(java.time.LocalDateTime.now())
+                                .role(role)
                                 .build();
                 } else {
 

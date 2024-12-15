@@ -9,11 +9,14 @@ import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2Res
 import org.springframework.stereotype.Service;
 
 import dev.tugba.flight_ticket_platform.auth.config.abstracts.JwtService;
+import dev.tugba.flight_ticket_platform.auth.config.constants.Role;
 import dev.tugba.flight_ticket_platform.business.abstracts.FlightService;
+import dev.tugba.flight_ticket_platform.business.requests.CreateFlightTicket;
 import dev.tugba.flight_ticket_platform.business.requests.SellFlightRequest;
 import dev.tugba.flight_ticket_platform.business.responses.GetAllFlightResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetFilterFlight;
 import dev.tugba.flight_ticket_platform.business.responses.GetFilterFlightResponse;
+import dev.tugba.flight_ticket_platform.business.responses.GetFlightTicketResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetSellFlightResponse;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.FlightNotFoundException;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.UserNotFoundException;
@@ -113,5 +116,50 @@ public class FlightManager implements FlightService {
                 } catch (Exception e) {
                         throw new RuntimeException("An error occurred while selling the flight");
                 }
+        }
+
+        @Override
+        public GetFlightTicketResponse addFlight(String token, CreateFlightTicket createFlightTicket) {
+                try {
+                        String userEmail = jwtService.extractUsername(token);
+
+                        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new UserNotFoundException("User not found"));
+
+
+                        if(user.getEmail() == null) {
+                                throw new RuntimeException("User not found");
+                        } else if(!user.getEmail().equals("admin@sisal.com")) {
+                                System.out.println("buraya düştü");
+                                throw new RuntimeException("Unauthorized");
+                        }
+
+                        Flight addedFlight = Flight.builder()
+                                                .arrivalCity(createFlightTicket.getArrivalCity())
+                                                .company(createFlightTicket.getCompany())
+                                                .departureCity(createFlightTicket.getDepartureCity())
+                                                .departureDay(createFlightTicket.getDepartureDay())
+                                                .departureHour(createFlightTicket.getDepartureHour())
+                                                .flightNumber(createFlightTicket.getFlightNumber())
+                                                .price(createFlightTicket.getPrice())
+                                                .build();
+        
+                        if(addedFlight == null) {
+                                throw new RuntimeException("Flight not found");
+                        }
+        
+                        flightRepository.save(addedFlight);
+        
+                        return GetFlightTicketResponse.builder()
+                                .message("ok")
+                                .build();
+                        
+                } catch (UserNotFoundException e) {
+                        throw new UserNotFoundException("User not found");
+                } catch (RuntimeException e) {
+                        throw new RuntimeException("Unauthorized");
+                } catch (Exception e) {
+                        throw new RuntimeException("An error occurred while adding the flight");
+                }
+               
         }
 }

@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 public enum Role {
   
   USER(Set.of(
-    Permission.USER_READ,
-    Permission.USER_UPDATE,
-    Permission.USER_DELETE,
-    Permission.USER_CREATE
+          Permission.USER_READ,
+          Permission.USER_UPDATE,
+          Permission.USER_DELETE,
+          Permission.USER_CREATE
  )),
   ADMIN(Set.of(
           Permission.ADMIN_READ,
