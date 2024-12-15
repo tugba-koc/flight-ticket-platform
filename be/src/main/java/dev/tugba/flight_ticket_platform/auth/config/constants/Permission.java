@@ -12,7 +12,11 @@ public enum Permission {
     VISITOR_READ("visitor:read"),
     VISITOR_UPDATE("visitor:update"),
     VISITOR_CREATE("visitor:create"),
-    VISITOR_DELETE("visitor:delete");
+    VISITOR_DELETE("visitor:delete"),
+    USER_READ("user:read"),
+    USER_UPDATE("user:update"),
+    USER_CREATE("user:create"),
+    USER_DELETE("user:delete");
 
     @Getter
     private final String permission;

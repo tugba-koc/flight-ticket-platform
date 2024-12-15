@@ -102,3 +102,20 @@ export const fetchFilterFlight = async (
   const res = await instanceGet.get(url);
   return res.data;
 };
+
+export const fetchFlightTicket = async (flightId) => {
+  const url = `${import.meta.env.VITE_BASE_URL}/api/v1/flight/sell`;
+  const data = {
+    flightId,
+    requestId: uuid4(),
+  };
+
+  const token = localStorage.getItem('token');
+
+  const res = await instancePost.post(url, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};

@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import dev.tugba.flight_ticket_platform.auth.config.abstracts.JwtService;
+import dev.tugba.flight_ticket_platform.auth.config.constants.Permission;
 import dev.tugba.flight_ticket_platform.auth.config.constants.Role;
 import dev.tugba.flight_ticket_platform.business.abstracts.AuthenticateService;
 import dev.tugba.flight_ticket_platform.business.requests.CreateRegisterRequest;
@@ -60,6 +61,7 @@ public class AuthenticateManager implements AuthenticateService {
         public LoginResponse login(LoginRequest loginRequest) {
                 User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
 
+                
                 if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
                         try {
                                 // Try to authenticate the user
@@ -73,8 +75,6 @@ public class AuthenticateManager implements AuthenticateService {
 
                         String token = jwtService.generateToken(user);
 
-                        System.out.println(token + " >>> token ");
-
                         if(tokenRepository.existsByUserId(user.getId())){
                                 tokenRepository.deleteByUserId(user.getId());
                         }
@@ -86,6 +86,7 @@ public class AuthenticateManager implements AuthenticateService {
                                 .createdAt(java.time.LocalDateTime.now())
                                 .build()
                                 );
+                        
 
                         return LoginResponse.builder()
                                 .status(200)

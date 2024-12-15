@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-public class CreateDepositRequest {
+public class SellFlightRequest {
         private String requestId;
-        private Double amount;
+        private String flightId;
 }

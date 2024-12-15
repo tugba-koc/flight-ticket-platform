@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,12 +20,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import dev.tugba.flight_ticket_platform.auth.config.abstracts.UserService;
 import dev.tugba.flight_ticket_platform.auth.config.components.JwtAuthenticationFilter;
+import dev.tugba.flight_ticket_platform.auth.config.constants.Permission;
 import dev.tugba.flight_ticket_platform.auth.config.constants.Role;
 import lombok.RequiredArgsConstructor;
 
@@ -57,13 +58,14 @@ public class SecurityConfiguration {
                 }))
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                .requestMatchers("/api/v1/user/deposit").permitAll()
-                .requestMatchers("/api/v1/user/info").permitAll()
+                .requestMatchers("/api/v1/user/deposit").hasAnyAuthority(Permission.VISITOR_UPDATE.getPermission())
+                .requestMatchers("/api/v1/user/info").permitAll() // need to add hasAnyAuthority
                 .requestMatchers("/api/v1/auth/login").permitAll()
                 .requestMatchers("/api/v1/auth/register").permitAll()
-                .requestMatchers("/api/v1/auth/reset-password").permitAll()
+                .requestMatchers("/api/v1/auth/reset-password").permitAll() // need to add hasAnyAuthority
                 .requestMatchers("/api/v1/flights/all").permitAll()
                 .requestMatchers("/api/v1/flights/search").permitAll()
+                .requestMatchers("/api/v1/flight/sell").hasAnyAuthority(Permission.VISITOR_UPDATE.getPermission())
                 .requestMatchers("/api/v1/user").hasRole(Role.VISITOR.name())
                 .anyRequest().authenticated()
             )

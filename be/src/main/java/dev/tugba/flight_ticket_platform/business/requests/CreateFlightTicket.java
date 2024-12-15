@@ -1,18 +1,18 @@
-package dev.tugba.flight_ticket_platform.business.responses;
+package dev.tugba.flight_ticket_platform.business.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 @Builder
-public class GetFilterFlight {
-        private String id;
+@AllArgsConstructor
+public class CreateFlightTicket {
+        private String flightNumber;
         private String departureCity;
         private String arrivalCity;
-        private Double price;
         private String company;
         private String departureDay;
         private String departureHour;
+        private Double price;
 }

@@ -2,6 +2,7 @@ package dev.tugba.flight_ticket_platform.entities.concretes;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 
 import dev.tugba.flight_ticket_platform.auth.config.constants.Role;
 
@@ -43,6 +44,9 @@ public class User implements UserDetails {
     @Field("password")
     private String password;
 
+    @Field("flightTicketIds")
+    private List<String> flightTicketIds;
+
     private Role role;
 
     @Field("createdAt")
@@ -52,7 +56,7 @@ public class User implements UserDetails {
     private LocalDateTime updatedAt;
 
     @Field("balance")
-    private int balance;
+    private Double balance;
 
     @Field("gender")
     private String gender;

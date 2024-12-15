@@ -31,7 +31,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/deposit")
-    @PreAuthorize("hasAuthority('visitor:create')")
+    @PreAuthorize("hasAuthority('visitor:update')")
     @CrossOrigin(exposedHeaders = {"Access-Control-Allow-Origin","Access-Control-Allow-Credentials"})
     public ResponseEntity<GetDepositResponse> deposit(@RequestHeader("Authorization") String bearerToken, @RequestBody CreateDepositRequest createDepositRequest) {
         return ResponseEntity.ok(userService.deposit(bearerToken, createDepositRequest));
