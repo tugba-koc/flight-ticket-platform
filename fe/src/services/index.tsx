@@ -136,3 +136,16 @@ export const fetchAddFlight = async (flight) => {
   });
   return res.data;
 };
+
+export const fetchUserFlightList = async () => {
+  const requestId = uuid4();
+  const url = `${
+    import.meta.env.VITE_BASE_URL
+  }/api/v1/flights/list?requestId=${requestId}`;
+  const res = await instanceGet.get(url, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  });
+  return res.data;
+};

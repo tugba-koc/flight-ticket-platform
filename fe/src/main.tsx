@@ -10,6 +10,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query';
 
+// global error handling
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error) => {

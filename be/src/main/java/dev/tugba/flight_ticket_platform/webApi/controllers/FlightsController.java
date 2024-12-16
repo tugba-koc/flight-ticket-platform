@@ -18,6 +18,7 @@ import dev.tugba.flight_ticket_platform.business.responses.GetAllFlightResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetFilterFlightResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetFlightTicketResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetSellFlightResponse;
+import dev.tugba.flight_ticket_platform.business.responses.GetUserFlightResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,5 +53,10 @@ public class FlightsController {
     public ResponseEntity<GetFlightTicketResponse> addFlight(@RequestHeader("Authorization") String token,  @RequestBody @Valid CreateFlightTicket createFlightTicket) {
         return ResponseEntity.ok(flightService.addFlight(token, createFlightTicket));
     }
-    
+
+    @GetMapping("/flights/list")
+    @PreAuthorize("hasAuthority('visitor:read')")
+    public ResponseEntity<GetUserFlightResponse> listUserFlights(@RequestHeader("Authorization") String token, @RequestParam("requestId") String requestId) {
+        return ResponseEntity.ok(flightService.listUserFlights(token, requestId));
+    }
 }

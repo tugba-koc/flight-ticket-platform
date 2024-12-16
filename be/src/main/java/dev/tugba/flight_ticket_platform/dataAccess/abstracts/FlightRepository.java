@@ -8,4 +8,5 @@ import dev.tugba.flight_ticket_platform.entities.concretes.Flight;
 
 public interface FlightRepository extends MongoRepository<Flight, String> {
         List<Flight> findByDepartureCityAndArrivalCityAndDepartureDay(String departureCity, String arrivalCity, String departureDay);
+        List<Flight> findByIdIn(List<String> flightIds);
 }

@@ -18,6 +18,7 @@ import dev.tugba.flight_ticket_platform.business.responses.GetFilterFlight;
 import dev.tugba.flight_ticket_platform.business.responses.GetFilterFlightResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetFlightTicketResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetSellFlightResponse;
+import dev.tugba.flight_ticket_platform.business.responses.GetUserFlightResponse;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.FlightNotFoundException;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.UserNotFoundException;
 import dev.tugba.flight_ticket_platform.dataAccess.abstracts.FlightRepository;
@@ -161,5 +162,46 @@ public class FlightManager implements FlightService {
                         throw new RuntimeException("An error occurred while adding the flight");
                 }
                
+        }
+
+        @Override
+        public GetUserFlightResponse listUserFlights(String token, String requestId) {
+                try {
+                        String userEmail = jwtService.extractUsername(token);
+
+                        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new UserNotFoundException("User not found"));
+
+                        List<String> flightTicketIds = user.getFlightTicketIds();
+                        List<Flight> flightList = new ArrayList<>();
+                        if(flightTicketIds != null) {
+                                flightList = flightRepository.findByIdIn(flightTicketIds);
+                                System.out.println("flightList >> " + flightList);
+                        } else {
+                                throw new RuntimeException("Flight not found");
+                        }
+
+                        List<GetFilterFlight> filterFlightDataList = flightList.stream().map(flight ->
+                                GetFilterFlight.builder()
+                                        .departureCity(flight.getDepartureCity())
+                                        .arrivalCity(flight.getArrivalCity())
+                                        .id(flight.getId())
+                                        .company(flight.getCompany())
+                                        .departureDay(flight.getDepartureDay())
+                                        .departureHour(flight.getDepartureHour())
+                                        .price(flight.getPrice()).build())
+                                .toList();
+
+                        return GetUserFlightResponse.builder()
+                                .datetime(LocalDateTime.now())
+                                .status(200)
+                                .flights(filterFlightDataList)
+                                .build();
+                } catch (UserNotFoundException e) {
+                        throw new UserNotFoundException("User not found");
+                } catch (RuntimeException e) {
+                        throw new RuntimeException("An error occurred while listing the flights");
+                } catch (Exception e) {
+                        throw new RuntimeException("An error occurred while listing the flights");
+                }
         }
 }

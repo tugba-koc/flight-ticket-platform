@@ -46,7 +46,7 @@ const Flights = () => {
               ? filterFlight?.filterFlightDataList.map((flight) => (
                   <FlightList flight={flight} key={flight.id} />
                 ))
-              : allFlightData?.flightDataList.map((flight) => (
+              : isSuccess && allFlightData?.flightDataList.map((flight) => (
                   <FlightList flight={flight} key={flight.id} />
                 ))}
           </div>
