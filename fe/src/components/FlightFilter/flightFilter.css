@@ -7,7 +7,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 10px;
+  padding: 10px 30px;
 
   @media screen and (min-width: 600px) {
     margin: 20px auto;
@@ -17,7 +17,7 @@
 #formFilter input,
 #formFilter select {
   width: 100%;
-  border: 1px solid #ddd;
+  border: 1px solid #fff;
   border-radius: 4px;
   box-sizing: border-box;
   font-size: 14px;
@@ -26,24 +26,19 @@
 
 #formFilter input:focus,
 #formFilter select:focus {
-  border-color: #951900;
   outline: none;
 }
 
 #formFilter button {
-  background-color: #951900;
+  background-image: linear-gradient(90deg, #fa6a24 0, #f2ac14);
   color: white;
   padding: 10px 15px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
-  width: 100px;
-  height: 38px;
-}
-
-#formFilter button:hover {
-  background-color: #0056b3;
+  width: 140px;
+  height: 59px;
 }
 
 #formFilter .error {
@@ -54,6 +49,7 @@
 
 #formFilter div {
   margin: 15px;
+  text-align: left;
 }
 
 #formFilter > div {
@@ -63,10 +59,17 @@
 @media (max-width: 600px) {
   #formFilter {
     padding: 15px;
-    margin: 20px;
+    margin: 0px;
   }
 
   #formFilter button {
     font-size: 14px;
   }
+}
+
+#formFilter span {
+  font-size: 14px;
+  color: #333;
+  font-weight: 700;
+  text-align: left;
 }

@@ -14,8 +14,6 @@ public class CreateRegisterRequest {
         private String email;
         private String password;
         private String phoneNumber;
-        private String address;
         private String birthDate;
-        private String role;   
         private String gender;
 }

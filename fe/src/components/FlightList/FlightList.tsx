@@ -1,7 +1,9 @@
 import React from 'react';
 import { useFlightTicket } from '../../hooks/useFlightTicket';
+import { useUser } from '../../context/UserContext';
 
 const FlightList = ({ flight, key }) => {
+
   const { getFlightTicket } = useFlightTicket(flight.id);
 
   const purchaseFlightTicket = (id) => {

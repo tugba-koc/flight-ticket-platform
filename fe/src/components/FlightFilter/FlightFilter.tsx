@@ -57,7 +57,7 @@ const FlightFilter = ({ setFilters, filters, refetch }) => {
           placeholder='Tarih'
         />
       </div>
-      <button type='submit'>Filtrele</button>
+      <button type='submit'>Search Flight</button>
     </form>
   );
 };

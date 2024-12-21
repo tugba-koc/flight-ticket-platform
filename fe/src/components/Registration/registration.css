@@ -1,14 +1,23 @@
 #registration {
   margin: 0px auto;
   padding: 20px;
-  background-color: #f9f9f9;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   @media screen and (min-width: 600px) {
-    margin: 20px auto;
-    width: 50%;
+    width: 80%;
   }
+}
+
+.registration-image {
+  width: 100%;
+  height: 750px;
+  object-fit: cover;
+}
+
+.registration-main-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: #f9f9f9;
 }
 
 #registration label {
@@ -22,7 +31,7 @@
 #registration select {
   width: 100%;
   padding: 10px;
-  margin: 8px 0;
+  margin: 5px 0;
   border: 1px solid #ddd;
   border-radius: 4px;
   box-sizing: border-box;
@@ -31,22 +40,24 @@
 
 #registration input:focus,
 #registration select:focus {
-  border-color: #951900;
+  border-color: #f7a500;
   outline: none;
 }
 
 #registration button {
-  color: white;
+  background-color: #f7a500;
   padding: 10px 15px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
   width: 100%;
+  color: white;
 }
 
-#registration button:hover {
-  background-color: #0056b3;
+#registration button:disabled {
+  background-color: #ffd279;
+  color: grey;
 }
 
 #registration .error {
@@ -55,7 +66,7 @@
   margin-top: 5px;
 }
 
-div {
+.input-wrapper {
   margin-bottom: 15px;
 }
 
@@ -68,4 +79,15 @@ div {
   #registration button {
     font-size: 14px;
   }
+}
+
+.login-link {
+  margin-top: 40px;
+}
+
+.login-link a {
+  color: #f7a500;
+  text-decoration: none;
+  font-size: large;
+  font-weight: 900;
 }

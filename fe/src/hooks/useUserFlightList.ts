@@ -2,8 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchUserFlightList } from '../services';
 
 export const useUserFlightList = () => {
+  // TODO: learn all the options of useQuery
   const { data, refetch, isLoading, error, isSuccess } = useQuery({
-    queryKey: ['useFlightAll'],
+    queryKey: ['userFlightList'],
     queryFn: async () => {
       const result = await fetchUserFlightList();
       return result;

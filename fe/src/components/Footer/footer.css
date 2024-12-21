@@ -1,0 +1,31 @@
+.footer-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 10px;
+  gap: 20px;
+}
+
+.footer {
+  background-color: #323a47;
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.footer-desc {
+  width: 216px;
+  font-size: 14px;
+  margin: auto;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+}

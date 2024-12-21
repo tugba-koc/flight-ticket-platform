@@ -46,7 +46,7 @@ public class AuthenticateManager implements AuthenticateService {
                         .name(createRegisterRequest.getName())
                         .surname(createRegisterRequest.getSurname())
                         .phoneNumber(createRegisterRequest.getPhoneNumber())
-                        .role(createRegisterRequest.getRole().toString() == "admin" ? Role.ADMIN: Role.VISITOR)
+                        .role(Role.VISITOR)
                         .gender(createRegisterRequest.getGender())
                         .createdAt(java.time.LocalDateTime.now())
                         .updatedAt(java.time.LocalDateTime.now())

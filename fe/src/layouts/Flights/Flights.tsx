@@ -28,6 +28,9 @@ const Flights = () => {
     departureDay: filters.date,
   });
 
+  console.log('filterFlight', filterFlight);
+  console.log('allFlightData', allFlightData);
+
   return (
     <>
       <Header />
@@ -46,7 +49,8 @@ const Flights = () => {
               ? filterFlight?.filterFlightDataList.map((flight) => (
                   <FlightList flight={flight} key={flight.id} />
                 ))
-              : isSuccess && allFlightData?.flightDataList.map((flight) => (
+              : isSuccess &&
+                allFlightData?.flightDataList.map((flight) => (
                   <FlightList flight={flight} key={flight.id} />
                 ))}
           </div>
