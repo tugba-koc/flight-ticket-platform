@@ -1,0 +1,58 @@
+.purchase-button {
+  margin-left: auto;
+  background-color: #f7a500;
+  color: white;
+  border: none;
+  width: 100px;
+  padding: 6px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.purchase-button span {
+  font-weight: 400;
+}
+
+.flightCard {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 5px;
+  gap: 50px;
+  padding: 10px;
+  background-color: white;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.flightCard-image {
+  opacity: 0.4;
+  height: 60px;
+}
+
+.flightCard-company {
+  font-size: 18px;
+  font-weight: 800;
+  color: darkslategray;
+}
+
+.flightCard-details {
+  display: flex;
+  gap: 40px;
+  margin-left: auto;
+}
+
+.flightCard-price {
+  font-size: 20px;
+  font-weight: 800;
+  color: #4a4a4a;
+}
+
+.purchase-button {
+  cursor: pointer;
+}

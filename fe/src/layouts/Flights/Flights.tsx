@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Header from '../../components/Header/Header';
 import { useFlightAll } from '../../hooks/useFlightAll';
 import './flights.css';
-import FlightList from '../../components/FlightList/FlightList';
+import FlightList from '../../components/FlightList/FlightCard';
 import FlightFilter from '../../components/FlightFilter/FlightFilter';
 import { useFilterFlight } from '../../hooks/useFilterFlight';
 
@@ -28,13 +28,16 @@ const Flights = () => {
     departureDay: filters.date,
   });
 
-  console.log('filterFlight', filterFlight);
-  console.log('allFlightData', allFlightData);
-
   return (
     <>
       <Header />
-      <h2>Flights</h2>
+      <img
+        className='flights-hero'
+        width={'100%'}
+        height={'260px'}
+        src='https://www.goindigo.in/content/dam/indigov2/6e-website/aboutus/flight-booking/International-flights.jpg'
+        alt=''
+      />
       <div id='flights-main'>
         <aside>
           <FlightFilter

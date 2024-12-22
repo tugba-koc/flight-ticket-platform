@@ -7,7 +7,7 @@ export const useFilterFlight = ({
   departureDay,
 }) => {
   const { data, refetch, isLoading, error, isSuccess } = useQuery({
-    queryKey: ['filterFlight'],
+    queryKey: ['filterFlight', departureCity, arrivalCity, departureDay],
     queryFn: async () => {
       const result = await fetchFilterFlight(
         departureCity,

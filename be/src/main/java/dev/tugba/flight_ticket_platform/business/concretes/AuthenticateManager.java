@@ -2,7 +2,6 @@ package dev.tugba.flight_ticket_platform.business.concretes;
 
 import java.time.LocalDateTime;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +17,7 @@ import dev.tugba.flight_ticket_platform.business.requests.UpdatePassword;
 import dev.tugba.flight_ticket_platform.business.responses.LoginResponse;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.AlreadyExistsUserException;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.AuthenticationServiceException;
+import dev.tugba.flight_ticket_platform.core.utilities.exceptions.UserNotFoundException;
 import dev.tugba.flight_ticket_platform.dataAccess.abstracts.TokenRepository;
 import dev.tugba.flight_ticket_platform.dataAccess.abstracts.UserRepository;
 import dev.tugba.flight_ticket_platform.entities.concretes.Token;
@@ -59,45 +59,53 @@ public class AuthenticateManager implements AuthenticateService {
 
         @Override
         public LoginResponse login(LoginRequest loginRequest) {
-                User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
-                System.out.println("Permission.VISITOR_READ.name()  >> " + Permission.VISITOR_READ.name());
+                try {
+                        User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
                 
-                if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-                        try {
-                                // Try to authenticate the user
-                                this.authenticationManager.authenticate(
-                                new UsernamePasswordAuthenticationToken(
-                                        loginRequest.getEmail(), loginRequest.getPassword()));
-                        } catch (Exception e) {
-                                e.printStackTrace();
-                                throw new RuntimeException("Accountcode and password are not matching.");
+                        if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+                                try {
+                                        // Try to authenticate the user
+                                        authenticationManager.authenticate(
+                                        new UsernamePasswordAuthenticationToken(
+                                                loginRequest.getEmail(), loginRequest.getPassword()));
+                                } catch (Exception e) {
+                                        throw new RuntimeException("Accountcode and password are not matching.");
+                                }
+
+                                String token = jwtService.generateToken(user);
+
+                                if(tokenRepository.existsByUserId(user.getId())){
+                                        tokenRepository.deleteByUserId(user.getId());
+                                }
+
+                                tokenRepository.save(Token.builder()
+                                        .token(token)
+                                        .userId(user.getId())
+                                        .valid(true)
+                                        .createdAt(java.time.LocalDateTime.now())
+                                        .build()
+                                        );
+
+                                String role = user.getRole() == Role.ADMIN ? "ADMIN" : "VISITOR";
+
+                                return LoginResponse.builder()
+                                        .status(200)
+                                        .token(token)
+                                        .datetime(java.time.LocalDateTime.now())
+                                        .role(role)
+                                        .build();
+                        } else {
+
+                                throw new AuthenticationServiceException("Accountcode and password are not matching.");
                         }
-
-                        String token = jwtService.generateToken(user);
-
-                        if(tokenRepository.existsByUserId(user.getId())){
-                                tokenRepository.deleteByUserId(user.getId());
-                        }
-
-                        tokenRepository.save(Token.builder()
-                                .token(token)
-                                .userId(user.getId())
-                                .valid(true)
-                                .createdAt(java.time.LocalDateTime.now())
-                                .build()
-                                );
-
-                        String role = user.getRole() == Role.ADMIN ? "ADMIN" : "VISITOR";
-
-                        return LoginResponse.builder()
-                                .status(200)
-                                .token(token)
-                                .datetime(java.time.LocalDateTime.now())
-                                .role(role)
-                                .build();
-                } else {
-
+                        
+                } catch (AuthenticationServiceException e) {
                         throw new AuthenticationServiceException("Accountcode and password are not matching.");
+                }
+                catch (RuntimeException e) {
+                        throw new UserNotFoundException("User not found");
+                } catch (Exception e) {
+                        throw new RuntimeException("User not found");
                 }
         }
 

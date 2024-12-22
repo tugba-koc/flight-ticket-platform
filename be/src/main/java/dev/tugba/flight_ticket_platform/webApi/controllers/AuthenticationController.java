@@ -2,7 +2,6 @@ package dev.tugba.flight_ticket_platform.webApi.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,8 +14,6 @@ import dev.tugba.flight_ticket_platform.business.requests.CreateRegisterRequest;
 import dev.tugba.flight_ticket_platform.business.requests.LoginRequest;
 import dev.tugba.flight_ticket_platform.business.requests.UpdatePassword;
 import dev.tugba.flight_ticket_platform.business.responses.LoginResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
@@ -45,11 +42,4 @@ public class AuthenticationController {
     public ResponseEntity<String> resetPassword(@RequestHeader("Authorization") String bearerToken, @RequestBody @Valid UpdatePassword updatePassword) {
         return ResponseEntity.ok(authenticateService.resetPassword(bearerToken, updatePassword));
     }
-
-
-/*     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@RequestHeader("Authorization") String bearerToken) {
-        SecurityContextHolder.clearContext();
-        return ResponseEntity.ok("{\"message\": \"Logout successful\"}");
-    } */
 }

@@ -1,6 +1,5 @@
 package dev.tugba.flight_ticket_platform.entities.concretes;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;

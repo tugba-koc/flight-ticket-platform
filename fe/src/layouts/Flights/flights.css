@@ -3,17 +3,21 @@
   flex-direction: column;
 }
 
-.flightCard {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  gap: 50px;
-  padding: 10px;
-}
+
 
 #flights-main {
   width: 80%;
   margin: 0 auto;
+  margin-top: -100px;
+  position: relative;
+  z-index: 999;
+  padding: 10px 18px 30px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  margin-bottom: 40px;
+}
+
+.flights-hero {
+  object-fit: cover;
+  opacity: 0.7;
 }

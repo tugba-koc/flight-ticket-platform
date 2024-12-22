@@ -55,14 +55,15 @@ const BalanceEdit = () => {
         Current Balance: <span>${balance}</span>
       </p>
 
-      <form onSubmit={handleConfirm}>
-        <input
-          type='text'
-          value={newBalance}
-          onChange={handleInputChange}
-          placeholder='Max 5 digits'
-        />
-        <br />
+      <form id='balance-edit' onSubmit={handleConfirm}>
+        <div className='input-wrapper'>
+          <input
+            type='text'
+            value={newBalance}
+            onChange={handleInputChange}
+            placeholder='Max 5 digits'
+          />
+        </div>
         {error && <p style={{ color: 'red' }}>{error}</p>}
         <button type='submit'>Deposit</button>
       </form>

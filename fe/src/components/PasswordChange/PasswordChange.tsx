@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useResetPassword } from '../../hooks/useResetPassword';
+import './passwordChange.css';
 
 const PasswordChange = () => {
   const [password, setPassword] = useState('');
@@ -29,21 +30,24 @@ const PasswordChange = () => {
   return (
     <div>
       <h2>Change Password</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type='password'
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder='New Password'
-        />
-        <br />
-        <input
-          type='password'
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          placeholder='Confirm New Password'
-        />
-        <br />
+      <form id='changePassword' onSubmit={handleSubmit}>
+        <div className='input-wrapper'>
+          <input
+            type='password'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder='New Password'
+          />
+        </div>
+
+        <div className='input-wrapper'>
+          <input
+            type='password'
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder='Confirm New Password'
+          />
+        </div>
         <button type='submit'>Change Password</button>
       </form>
       {message && <p>{message}</p>}

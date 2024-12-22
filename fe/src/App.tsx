@@ -23,6 +23,7 @@ function App() {
         <Route path='/flights' element={<Flights />} />
 
         <Route path='/portal' element={<Portal />}>
+          <Route index element={<PasswordChange />} />
           <Route path='password-change' element={<PasswordChange />} />
           <Route path='balance-edit' element={<BalanceEdit />} />
           <Route path='flight-tickets' element={<FlightTickets />} />

@@ -1,0 +1,47 @@
+.flightCardTicket {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 5px;
+  gap: 50px;
+  padding: 10px;
+  background-color: white;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.flightCardTicket-image {
+  opacity: 0.4;
+  height: 60px;
+}
+
+.flightCardTicket-company {
+  font-size: 18px;
+  font-weight: 800;
+  color: darkslategray;
+}
+
+.flightCardTicket-details {
+  display: flex;
+  gap: 40px;
+  margin-left: auto;
+}
+
+.flightCardTicket-hour {
+  font-size: 20px;
+  font-weight: 800;
+  color: #4a4a4a;
+}
+
+.flightCardTicket-price {
+  font-size: 20px;
+  font-weight: 500;
+  color: #4a4a4a;
+}
+
+.flightTickets-list {
+  display: flex;
+  flex-direction: column;
+  padding: 0 100px;
+  margin-bottom: 40px;
+}

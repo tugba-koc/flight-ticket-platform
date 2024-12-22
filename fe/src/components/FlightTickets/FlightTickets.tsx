@@ -1,21 +1,45 @@
 import React from 'react';
 import { useUserFlightList } from '../../hooks/useUserFlightList';
+import './flightTickets.css';
+
+/* "departureCity": "Ankara",
+"arrivalCity": "İstanbul",
+"price": 299.0,
+"company": "THY",
+"departureDay": "2024-12-16",
+"departureHour": "14:30:00" */
+
+const FlightTicketCard = ({ ticket }) => {
+  return (
+    <div className='flightCardTicket'>
+      <p className='flightCardTicket-company'>{ticket?.company}</p>
+
+      <p>{ticket?.departureCity}</p>
+      <img
+        className='flightCardTicket-image'
+        width={'10%'}
+        src='https://static.thenounproject.com/png/783874-200.png'
+      />
+      <p>{ticket?.arrivalCity}</p>
+      <div className='flightCardTicket-details'>
+        <p className='flightCardTicket-hour'>{ticket?.departureHour}</p>
+        <p className='flightCardTicket-price'>{ticket?.price}$</p>
+      </div>
+    </div>
+  );
+};
 
 const FlightTickets = () => {
   const { data: tickets, isSuccess } = useUserFlightList();
 
-  console.log('tickets >>> ', tickets);
-
   return (
     <div>
-      <h2>Your Flight Tickets</h2>
-      <ul>
+      <h2>My Flight Tickets</h2>
+      <ul className='flightTickets-list'>
         {isSuccess &&
           tickets &&
           tickets?.flights.map((ticket) => (
-            <li key={ticket.id}>
-              Destination: {ticket.departureCity}, Date: {ticket.departureDay}
-            </li>
+            <FlightTicketCard ticket={ticket} key={ticket.id} />
           ))}
       </ul>
     </div>
