@@ -1,8 +1,5 @@
 package dev.tugba.flight_ticket_platform.business.abstracts;
 
-import java.time.LocalDate;
-import java.util.List;
-
 import dev.tugba.flight_ticket_platform.business.requests.CreateFlightTicket;
 import dev.tugba.flight_ticket_platform.business.requests.SellFlightRequest;
 import dev.tugba.flight_ticket_platform.business.responses.GetAllFlightResponse;

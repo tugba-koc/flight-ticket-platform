@@ -1,7 +1,5 @@
 package dev.tugba.flight_ticket_platform.webApi.controllers;
 
-import java.util.List;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.tugba.flight_ticket_platform.business.abstracts.FlightService;
 import dev.tugba.flight_ticket_platform.business.requests.CreateFlightTicket;
 import dev.tugba.flight_ticket_platform.business.requests.SellFlightRequest;
-import dev.tugba.flight_ticket_platform.business.requests.UpdatePassword;
 import dev.tugba.flight_ticket_platform.business.responses.GetAllFlightResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetFilterFlightResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetFlightTicketResponse;

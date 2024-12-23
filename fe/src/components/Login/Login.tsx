@@ -13,6 +13,8 @@ const Login = () => {
     password: '',
   });
 
+  const [error, setError] = useState(null);
+
   const BUTTON_DISABLED = !formData.email || !formData.password;
 
   const { data: loginData, login, error: errorLogin } = useLogin(formData);
@@ -23,6 +25,7 @@ const Login = () => {
       ...prevData,
       [name]: value,
     }));
+    setError(null);
   };
 
   const handleSubmit = (e) => {
@@ -38,7 +41,11 @@ const Login = () => {
     }
   }, [navigate, loginData, dispatch]);
 
-  console.log(errorLogin, 'errorLogin');
+  useEffect(() => {
+    if (errorLogin) {
+      setError(errorLogin);
+    }
+  }, [errorLogin]);
 
   return (
     <>
@@ -54,6 +61,7 @@ const Login = () => {
           <h2>Login</h2>
           <div className='input-wrapper'>
             <input
+              className={error ? 'error' : ''}
               type='email'
               id='email'
               name='email'
@@ -66,6 +74,7 @@ const Login = () => {
 
           <div className='input-wrapper'>
             <input
+              className={error ? 'error' : ''}
               type='password'
               id='password'
               name='password'
@@ -75,7 +84,7 @@ const Login = () => {
               required
             />
           </div>
-          {errorLogin && <p>Error occured</p>}
+          {error && <p className='error-message'>{error?.errors}</p>}
           <button disabled={BUTTON_DISABLED} type='submit'>
             Submit
           </button>

@@ -1,5 +1,7 @@
 package dev.tugba.flight_ticket_platform.business.responses;
 
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,5 +10,7 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class GetFlightTicketResponse {
-        private String message;
+        private int status;
+        private LocalDateTime datetime;
+        private String requestId;
 }

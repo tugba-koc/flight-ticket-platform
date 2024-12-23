@@ -14,4 +14,5 @@ public class GetFilterFlightResponse {
         private List<GetFilterFlight> filterFlightDataList;
         private int status;
         private LocalDateTime datetime;
+        private String requestId;
 }

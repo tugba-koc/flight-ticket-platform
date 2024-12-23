@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDeposit } from '../../hooks/useDeposit';
 import './balanceEdit.css';
+import { useUserInfo } from '../../hooks/useUserInfo';
 
 const BalanceEdit = () => {
+  const { data: userInfo, isLoading } = useUserInfo();
+
   const [balance, setBalance] = useState(100);
   const [newBalance, setNewBalance] = useState('');
   const [error, setError] = useState('');
@@ -52,7 +55,8 @@ const BalanceEdit = () => {
     <div>
       <h2>Balance Management</h2>
       <p>
-        Current Balance: <span>${balance}</span>
+        Current Balance:{' '}
+        <span>{depositData?.newAmount ?? userInfo?.balance ?? '-'}$</span>
       </p>
 
       <form id='balance-edit' onSubmit={handleConfirm}>

@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router';
 const Registration = () => {
   const navigate = useNavigate();
 
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     turkishId: '',
     name: '',
@@ -26,7 +27,11 @@ const Registration = () => {
     !formData.phoneNumber ||
     !formData.birthDate;
 
-  const { data: registerData, register } = useRegister(formData);
+  const {
+    data: registerData,
+    register,
+    error: registerError,
+  } = useRegister(formData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,6 +39,7 @@ const Registration = () => {
       ...prevData,
       [name]: value,
     }));
+    setError(null);
   };
 
   const handleSubmit = (e) => {
@@ -46,6 +52,10 @@ const Registration = () => {
       navigate('/login');
     }
   }, [navigate, registerData]);
+
+  useEffect(() => {
+    setError(registerError);
+  }, [registerError]);
 
   return (
     <>
@@ -159,7 +169,7 @@ const Registration = () => {
               <option value='other'>Other</option>
             </select>
           </div>
-
+          {error && <p className='error-message'>{error?.errors}</p>}
           <button disabled={BUTTON_DISABLED} type='submit'>
             Submit
           </button>

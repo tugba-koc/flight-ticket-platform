@@ -37,7 +37,9 @@ public class UserManager implements UserService {
                 user.setBalance(createDepositRequest.getAmount());
                 userRepository.save(user);
                 return GetDepositResponse.builder()
-                        .datetime(LocalDate.now())
+                        .datetime(LocalDateTime.now())
+                        .requestId(createDepositRequest.getRequestId())
+                        .status(200)
                         .newAmount(createDepositRequest.getAmount())
                         .build();
         }
@@ -53,6 +55,8 @@ public class UserManager implements UserService {
                         .balance(user.getBalance())
                         .phoneNumber(user.getPhoneNumber())
                         .datetime(LocalDateTime.now())
+                        .requestId(requestId)
+                        .status(200)
                         .build();
         }
 }

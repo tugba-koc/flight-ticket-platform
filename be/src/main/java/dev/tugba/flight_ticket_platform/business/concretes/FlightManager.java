@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
 import org.springframework.stereotype.Service;
 
 import dev.tugba.flight_ticket_platform.auth.config.abstracts.JwtService;
-import dev.tugba.flight_ticket_platform.auth.config.constants.Role;
 import dev.tugba.flight_ticket_platform.business.abstracts.FlightService;
 import dev.tugba.flight_ticket_platform.business.requests.CreateFlightTicket;
 import dev.tugba.flight_ticket_platform.business.requests.SellFlightRequest;
@@ -20,6 +18,7 @@ import dev.tugba.flight_ticket_platform.business.responses.GetFlightTicketRespon
 import dev.tugba.flight_ticket_platform.business.responses.GetSellFlightResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetUserFlightResponse;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.FlightNotFoundException;
+import dev.tugba.flight_ticket_platform.core.utilities.exceptions.SaveToDBException;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.UserNotFoundException;
 import dev.tugba.flight_ticket_platform.dataAccess.abstracts.FlightRepository;
 import dev.tugba.flight_ticket_platform.dataAccess.abstracts.UserRepository;
@@ -40,16 +39,16 @@ public class FlightManager implements FlightService {
                 GetAllFlightResponse getAllFlightResponse = GetAllFlightResponse.builder()
                         .datetime(LocalDateTime.now())
                         .flightDataList(flightList)
+                        .requestId(requestId)
                         .status(200)
                         .build();
 
                         return getAllFlightResponse;
-
         }
 
         @Override
         public GetFilterFlightResponse searchFlights(String requestId, String departureCity, String arrivalCity, String departureDay) {
-                 List<Flight> flightList = flightRepository.findByDepartureCityAndArrivalCityAndDepartureDay(departureCity, arrivalCity, departureDay);
+                 List<Flight> flightList = flightRepository.findByDepartureCityAndArrivalCityAndDepartureDay(departureCity, arrivalCity, departureDay).orElseThrow(()-> new FlightNotFoundException("Flight not found"));
                  List<GetFilterFlight> filterFlightDataList = flightList.stream().map(flight ->  
                         GetFilterFlight.builder()
                                 .departureCity(flight.getDepartureCity())
@@ -60,16 +59,15 @@ public class FlightManager implements FlightService {
                                 .departureHour(flight.getDepartureHour())
                                 .price(flight.getPrice()).build())
                                         .toList();
+
                 return GetFilterFlightResponse.builder()
+                        .requestId(requestId)
                         .datetime(LocalDateTime.now())
                         .filterFlightDataList(filterFlightDataList)
                         .status(200)
                         .build();
         }
 
-/*         private LocalDateTime datetime;
-        private String status;
-        private String requestId; */
         @Override
         public GetSellFlightResponse sellFlight(String token, SellFlightRequest sellFlightRequest) {
                 try {
@@ -81,9 +79,6 @@ public class FlightManager implements FlightService {
 
                         Double flightPrice = flight.getPrice();
                         Double userBalance = user.getBalance();
-                        System.out.println("balances");
-                        System.out.println(userBalance);
-                        System.out.println(flightPrice);
 
                         if(userBalance < flightPrice) {
                                 throw new RuntimeException("Insufficient balance");
@@ -98,22 +93,25 @@ public class FlightManager implements FlightService {
                         flightTicketIds.add(sellFlightRequest.getFlightId());
                         user.setFlightTicketIds(flightTicketIds);
 
-                        userRepository.save(user);
+                        try {
+                                userRepository.save(user);
+                        } catch (SaveToDBException e) {
+                                throw new SaveToDBException("An error occurred while saving to the database");
+                        }
 
                         return GetSellFlightResponse.builder()
                                 .datetime(LocalDateTime.now())
                                 .status(200)
-                                .requestId(UUID.randomUUID().toString())
+                                .requestId(sellFlightRequest.getRequestId())
                                 .build();
-                        }
-
-                // TODO: it is a good structure to catch exceptions separately
-                catch (UserNotFoundException e) {
-                        throw new UserNotFoundException("\"User not found");
+                } catch (UserNotFoundException e) {
+                        throw new UserNotFoundException(e.getMessage());
                 } catch (FlightNotFoundException e) {
-                        throw new FlightNotFoundException("Flight not found");
+                        throw new FlightNotFoundException(e.getMessage());
+                } catch (SaveToDBException e) {
+                        throw new SaveToDBException(e.getMessage());
                 } catch (RuntimeException e) {
-                        throw new RuntimeException("Insufficient balance");
+                        throw new RuntimeException(e.getMessage());
                 } catch (Exception e) {
                         throw new RuntimeException("An error occurred while selling the flight");
                 }
@@ -151,7 +149,9 @@ public class FlightManager implements FlightService {
                         flightRepository.save(addedFlight);
         
                         return GetFlightTicketResponse.builder()
-                                .message("ok")
+                                .datetime(LocalDateTime.now())
+                                .status(200)
+                                .requestId(createFlightTicket.getRequestId())
                                 .build();
                         
                 } catch (UserNotFoundException e) {
@@ -174,10 +174,14 @@ public class FlightManager implements FlightService {
                         List<String> flightTicketIds = user.getFlightTicketIds();
                         List<Flight> flightList = new ArrayList<>();
                         if(flightTicketIds != null) {
-                                flightList = flightRepository.findByIdIn(flightTicketIds);
-                                System.out.println("flightList >> " + flightList);
+                                flightList = flightRepository.findByIdIn(flightTicketIds).orElseThrow(()-> new FlightNotFoundException("Flight not found"));
                         } else {
-                                throw new RuntimeException("Flight not found");
+                                return GetUserFlightResponse.builder()
+                                .datetime(LocalDateTime.now())
+                                .status(200)
+                                .flights(new ArrayList<>())
+                                .requestId(requestId)
+                                .build();
                         }
 
                         List<GetFilterFlight> filterFlightDataList = flightList.stream().map(flight ->
@@ -195,13 +199,14 @@ public class FlightManager implements FlightService {
                                 .datetime(LocalDateTime.now())
                                 .status(200)
                                 .flights(filterFlightDataList)
+                                .requestId(requestId)
                                 .build();
                 } catch (UserNotFoundException e) {
-                        throw new UserNotFoundException("User not found");
+                        throw new UserNotFoundException(e.getMessage());
                 } catch (RuntimeException e) {
-                        throw new RuntimeException("An error occurred while listing the flights");
+                        throw new RuntimeException(e.getMessage());
                 } catch (Exception e) {
-                        throw new RuntimeException("An error occurred while listing the flights");
+                        throw new RuntimeException(e.getMessage());
                 }
         }
 }

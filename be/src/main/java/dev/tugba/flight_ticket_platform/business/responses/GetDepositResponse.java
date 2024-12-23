@@ -1,6 +1,6 @@
 package dev.tugba.flight_ticket_platform.business.responses;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,5 +11,7 @@ import lombok.Data;
 @Builder
 public class GetDepositResponse {
         private Double newAmount;
-        private LocalDate datetime;
+        private int status;
+        private LocalDateTime datetime;
+        private String requestId;
 }

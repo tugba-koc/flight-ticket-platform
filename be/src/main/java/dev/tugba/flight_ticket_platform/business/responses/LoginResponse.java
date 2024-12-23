@@ -11,7 +11,8 @@ import lombok.Data;
 @Builder
 public class LoginResponse {
         private String token;
+        private String role;
         private int status;
         private LocalDateTime datetime;
-        private String role;
+        private String requestId;
 }

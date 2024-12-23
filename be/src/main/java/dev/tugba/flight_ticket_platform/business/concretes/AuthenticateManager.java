@@ -8,7 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import dev.tugba.flight_ticket_platform.auth.config.abstracts.JwtService;
-import dev.tugba.flight_ticket_platform.auth.config.constants.Permission;
 import dev.tugba.flight_ticket_platform.auth.config.constants.Role;
 import dev.tugba.flight_ticket_platform.business.abstracts.AuthenticateService;
 import dev.tugba.flight_ticket_platform.business.requests.CreateRegisterRequest;
@@ -17,6 +16,10 @@ import dev.tugba.flight_ticket_platform.business.requests.UpdatePassword;
 import dev.tugba.flight_ticket_platform.business.responses.LoginResponse;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.AlreadyExistsUserException;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.AuthenticationServiceException;
+import dev.tugba.flight_ticket_platform.core.utilities.exceptions.InvalidCredentialsException;
+import dev.tugba.flight_ticket_platform.core.utilities.exceptions.MissingParameterException;
+import dev.tugba.flight_ticket_platform.core.utilities.exceptions.SaveToDBException;
+import dev.tugba.flight_ticket_platform.core.utilities.exceptions.TokenCreationException;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.UserNotFoundException;
 import dev.tugba.flight_ticket_platform.dataAccess.abstracts.TokenRepository;
 import dev.tugba.flight_ticket_platform.dataAccess.abstracts.UserRepository;
@@ -36,89 +39,143 @@ public class AuthenticateManager implements AuthenticateService {
 
         @Override
         public String createUser(CreateRegisterRequest createRegisterRequest) {
-                if (userRepository.existsByEmail(createRegisterRequest.getEmail())) {
-                        throw new AlreadyExistsUserException("the user already exists");
-                } else {
-                        userRepository.save(User.builder()
-                        .email(createRegisterRequest.getEmail())
-                        .password(passwordEncoder.encode(createRegisterRequest.getPassword()))
-                        .turkishId(createRegisterRequest.getTurkishId())
-                        .name(createRegisterRequest.getName())
-                        .surname(createRegisterRequest.getSurname())
-                        .phoneNumber(createRegisterRequest.getPhoneNumber())
-                        .role(Role.VISITOR)
-                        .gender(createRegisterRequest.getGender())
-                        .createdAt(java.time.LocalDateTime.now())
-                        .updatedAt(java.time.LocalDateTime.now())
-                        .build());
-                        
-                        String ok = "ok";
-                        return ok;
+                try {
+                        // check if the user exists
+                        if (userRepository.existsByEmail(createRegisterRequest.getEmail())) {
+                                throw new AlreadyExistsUserException("The user already exists");
+                        } else {
+                                // save user
+                                try {
+                                        userRepository.save(User.builder()
+                                        .email(createRegisterRequest.getEmail())
+                                        .password(passwordEncoder.encode(createRegisterRequest.getPassword()))
+                                        .turkishId(createRegisterRequest.getTurkishId())
+                                        .name(createRegisterRequest.getName())
+                                        .surname(createRegisterRequest.getSurname())
+                                        .phoneNumber(createRegisterRequest.getPhoneNumber())
+                                        .role(Role.VISITOR)
+                                        .gender(createRegisterRequest.getGender())
+                                        .createdAt(java.time.LocalDateTime.now())
+                                        .updatedAt(java.time.LocalDateTime.now())
+                                        .balance(0.0)
+                                        .build());
+                                
+                                String saved = "saved";
+                                return saved;
+                                        
+                                } catch (SaveToDBException e) {
+                                        throw new SaveToDBException("An unexpected error occurred while saving to the database");
+                                }
+
+                        }
+                } catch (AlreadyExistsUserException e) {
+                        throw new AlreadyExistsUserException(e.getMessage());
+                } catch (SaveToDBException e) {
+                        throw new SaveToDBException(e.getMessage());
                 }
         }
 
         @Override
         public LoginResponse login(LoginRequest loginRequest) {
+            try {
+                // find user
+                User user = userRepository.findByEmail(loginRequest.getEmail())
+                    .orElseThrow(() -> new UserNotFoundException("User not found, please register"));
+        
+                // check password
+                if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+                    throw new InvalidCredentialsException("Accountcode and password do not match");
+                }
+        
+                // authenticate user
                 try {
-                        User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
-                
-                        if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-                                try {
-                                        // Try to authenticate the user
-                                        authenticationManager.authenticate(
-                                        new UsernamePasswordAuthenticationToken(
-                                                loginRequest.getEmail(), loginRequest.getPassword()));
-                                } catch (Exception e) {
-                                        throw new RuntimeException("Accountcode and password are not matching.");
-                                }
-
-                                String token = jwtService.generateToken(user);
-
-                                if(tokenRepository.existsByUserId(user.getId())){
-                                        tokenRepository.deleteByUserId(user.getId());
-                                }
-
-                                tokenRepository.save(Token.builder()
-                                        .token(token)
-                                        .userId(user.getId())
-                                        .valid(true)
-                                        .createdAt(java.time.LocalDateTime.now())
-                                        .build()
-                                        );
-
-                                String role = user.getRole() == Role.ADMIN ? "ADMIN" : "VISITOR";
-
-                                return LoginResponse.builder()
-                                        .status(200)
-                                        .token(token)
-                                        .datetime(java.time.LocalDateTime.now())
-                                        .role(role)
-                                        .build();
-                        } else {
-
-                                throw new AuthenticationServiceException("Accountcode and password are not matching.");
-                        }
-                        
+                    authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(), loginRequest.getPassword())
+                    );
                 } catch (AuthenticationServiceException e) {
-                        throw new AuthenticationServiceException("Accountcode and password are not matching.");
+                    throw new AuthenticationServiceException("Authentication failed for provided credentials");
                 }
-                catch (RuntimeException e) {
-                        throw new UserNotFoundException("User not found");
+        
+                // generate token
+                String token;
+                try {
+                    token = jwtService.generateToken(user);
                 } catch (Exception e) {
-                        throw new RuntimeException("User not found");
+                    throw new TokenCreationException("Failed to generate token");
                 }
+        
+                // save token
+                tokenRepository.save(Token.builder()
+                    .token(token)
+                    .userId(user.getId())
+                    .valid(true)
+                    .createdAt(java.time.LocalDateTime.now())
+                    .build()
+                );
+        
+                String role = user.getRole() == Role.ADMIN ? "ADMIN" : "VISITOR";
+        
+                return LoginResponse.builder()
+                    .status(200)
+                    .token(token)
+                    .datetime(LocalDateTime.now())
+                    .requestId(loginRequest.getRequestId())
+                    .role(role)
+                    .build();
+        
+            } catch (UserNotFoundException e) {
+                throw new UserNotFoundException(e.getMessage());
+            } catch (InvalidCredentialsException e) {
+                throw new InvalidCredentialsException(e.getMessage());
+            } catch (AuthenticationServiceException e) {
+                throw new AuthenticationServiceException(e.getMessage());
+            } catch (TokenCreationException e) {
+                throw new TokenCreationException(e.getMessage());
+            } catch (Exception e) {
+                throw new RuntimeException("An unexpected error occurred");
+            }
         }
+        
 
         @Override
         public String resetPassword(String bearerToken, UpdatePassword updatePassword) {
-                String username = jwtService.extractUsername(bearerToken); // email
-                User user = userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("User not found"));
+                try {
+                        if(updatePassword.getPassword().isEmpty() || updatePassword.getNewPassword().isEmpty()) {
+                                throw new MissingParameterException("Password fields cannot be empty");
+                        };
+                        if (!updatePassword.getNewPassword().equals(updatePassword.getPassword())) {
+                                throw new InvalidCredentialsException("Passwords do not match");
+                        };
+                        String userEmail = jwtService.extractUsername(bearerToken);
+                
+                        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new UserNotFoundException("User not found"));
+        
+                        user.setUpdatedAt(LocalDateTime.now());
+                        if (!updatePassword.getNewPassword().isEmpty()){
+                                user.setPassword(passwordEncoder.encode(updatePassword.getNewPassword()));
+                        } else {
+                                throw new RuntimeException("New password is required");
+                        }
+        
+                        try {
+                                userRepository.save(user);
+                        } catch (SaveToDBException e) {
+                                throw new SaveToDBException("An unexpected error occurred while saving to the database");
+                        }
+                        return "Password updated successfully";
+                } catch (MissingParameterException e) {
+                        throw new MissingParameterException(e.getMessage());
+                } catch (InvalidCredentialsException e) {
+                        throw new InvalidCredentialsException(e.getMessage());
+                } catch (UserNotFoundException e) {
+                        throw new UserNotFoundException(e.getMessage());
+                } catch (SaveToDBException e) {
+                        throw new SaveToDBException(e.getMessage());
+                } catch (Exception e) {
+                        throw new RuntimeException("An unexpected error occurred");
+                }
 
-                user.setUpdatedAt(LocalDateTime.now());
-                user.setPassword(passwordEncoder.encode(updatePassword.getNewPassword()));
-
-                userRepository.save(user);
-                return "Password updated successfully";
         }
 
 }

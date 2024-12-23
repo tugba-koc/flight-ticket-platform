@@ -1,19 +1,15 @@
 package dev.tugba.flight_ticket_platform.auth.config.concretes;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import dev.tugba.flight_ticket_platform.auth.config.abstracts.JwtService;
+import dev.tugba.flight_ticket_platform.core.utilities.exceptions.TokenCreationException;
 import dev.tugba.flight_ticket_platform.entities.concretes.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -30,14 +26,19 @@ public class JwtManager implements JwtService {
     private String jwtSecret;
 
     public String generateToken(User user) {
-        return Jwts
-        .builder()
-        .setSubject(user.getEmail())
-        .claim("userId", user.getId())
-        .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24 * 90))
-        .signWith(getSigninKey(),SignatureAlgorithm.HS256)
-        .compact();
+        try {
+            return Jwts
+                .builder()
+                .setSubject(user.getEmail())
+                .claim("userId", user.getId())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24 * 90))
+                .signWith(getSigninKey(),SignatureAlgorithm.HS256)
+                .compact();
+        } catch (TokenCreationException e) {
+            throw new TokenCreationException("JWT token creation error");
+        }
+
     }
 
     private SecretKey getSigninKey() {
@@ -62,6 +63,7 @@ public class JwtManager implements JwtService {
         if(token.startsWith("Bearer ")) {
             token = token.substring(7);
         }
+        // TODO: we can not see the error message in response
         try {
             return Jwts
                 .parserBuilder()
@@ -70,11 +72,11 @@ public class JwtManager implements JwtService {
                 .parseClaimsJws(token)
                 .getBody();
         } catch (MalformedJwtException e) {
-            throw new RuntimeException("Invalid JWT format: " + e.getMessage(), e);
+            throw new MalformedJwtException("Invalid JWT format");
         } catch (ExpiredJwtException e) {
-            throw new RuntimeException("JWT token has expired", e);
+            throw new ExpiredJwtException(null, null, "JWT expired");
         } catch (Exception e) {
-            throw new RuntimeException("JWT processing error", e);
+            throw new RuntimeException("JWT processing error");
         }
     }
     

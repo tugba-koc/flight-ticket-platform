@@ -60,12 +60,6 @@
   color: grey;
 }
 
-#login .error {
-  color: red;
-  font-size: 12px;
-  margin-top: 5px;
-}
-
 .input-wrapper {
   margin-bottom: 15px;
 }

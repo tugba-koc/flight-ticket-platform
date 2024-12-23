@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, NavLink, useNavigate } from 'react-router';
+import { NavLink, useNavigate } from 'react-router';
 import { Outlet } from 'react-router';
 import './portal.css';
 

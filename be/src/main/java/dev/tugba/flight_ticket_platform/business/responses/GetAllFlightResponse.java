@@ -15,4 +15,5 @@ public class GetAllFlightResponse {
     private List<Flight> flightDataList;
     private int status;
     private LocalDateTime datetime;
+    private String requestId;
 }

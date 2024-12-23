@@ -14,4 +14,5 @@ public class GetUserFlightResponse {
         private List<GetFilterFlight> flights;
         private int status;
         private LocalDateTime datetime;
+        private String requestId;
 }

@@ -24,6 +24,8 @@ instanceGet.interceptors.response.use(
     return response;
   },
   function (error) {
+    console.log('error ==> ', error);
+
     const standardError = error.response.data;
     return Promise.reject(standardError);
   }
@@ -38,6 +40,7 @@ instancePost.interceptors.response.use(
     return response;
   },
   function (error) {
+    console.log('error ==> ', error);
     const standardError = error.response.data;
     return Promise.reject(standardError);
   }

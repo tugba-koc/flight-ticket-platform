@@ -3,3 +3,13 @@ body {
   margin: 0px;
   font-family: 'Open Sans', sans-serif;
 }
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+input.error {
+  border-color: red !important;
+}
