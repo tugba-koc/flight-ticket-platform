@@ -15,6 +15,7 @@ public class GetUserInfoResponse {
     private String surname;
     private String phoneNumber;
     private Double balance;
+    private String role;
     private int status;
     private LocalDateTime datetime;
     private String requestId;

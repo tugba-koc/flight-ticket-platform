@@ -52,7 +52,7 @@ public class FlightsController {
     }
 
     @GetMapping("/flights/list")
-    @PreAuthorize("hasAuthority('visitor:read')")
+    @PreAuthorize("hasAnyAuthority('visitor:read', 'admin:read')")
     public ResponseEntity<GetUserFlightResponse> listUserFlights(@RequestHeader("Authorization") String token, @RequestParam("requestId") String requestId) {
         return ResponseEntity.ok(flightService.listUserFlights(token, requestId));
     }

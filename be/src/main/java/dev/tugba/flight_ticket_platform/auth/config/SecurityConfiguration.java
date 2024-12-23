@@ -64,7 +64,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/api/v1/auth/reset-password").permitAll()
                 .requestMatchers("/api/v1/flights/all").permitAll()
                 .requestMatchers("/api/v1/flights/search").permitAll()
-                .requestMatchers("/api/v1/flights/list").hasAuthority(Permission.VISITOR_READ.getPermission())
+                .requestMatchers("/api/v1/flights/list").hasAnyAuthority(Permission.VISITOR_READ.getPermission(), Permission.ADMIN_READ.getPermission())
                 .requestMatchers("/api/v1/flight/sell").hasAuthority(Permission.VISITOR_UPDATE.getPermission())
                 .requestMatchers("/api/v1/flight/add").hasAuthority(Permission.ADMIN_CREATE.getPermission())
                 .requestMatchers("/api/v1/user").hasRole(Role.VISITOR.name())

@@ -77,7 +77,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleMalformedJwtException(MalformedJwtException ex) {
         System.out.println("geldi");
         List<String> errors = Collections.singletonList(ex.getMessage());
-        return new ResponseEntity<>(getErrorsMap(errors, "Malformed JWT Exception", HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(getErrorsMap(errors, "Malformed JWT Exception", HttpStatus.UNAUTHORIZED), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
@@ -90,6 +90,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleMissingParameterException(MissingParameterException ex) {
         List<String> errors = Collections.singletonList(ex.getMessage());
         return new ResponseEntity<>(getErrorsMap(errors, "Missing Parameter Exception", HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<Map<String, Object>> handleAuthorizationException(AuthorizationException ex) {
+        List<String> errors = Collections.singletonList(ex.getMessage());
+        return new ResponseEntity<>(getErrorsMap(errors, "Authorization Exception", HttpStatus.UNAUTHORIZED), HttpStatus.UNAUTHORIZED);
     }
 
     private Map<String, Object > getErrorsMap(List<String> errors, String message, HttpStatus status) {

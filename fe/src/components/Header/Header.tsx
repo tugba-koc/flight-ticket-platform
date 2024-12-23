@@ -3,12 +3,11 @@ import { Link, useNavigate } from 'react-router';
 import './header.css';
 import { useUserInfo } from '../../hooks/useUserInfo';
 import { useLogout } from '../../hooks/useLogout';
-import { useUser } from '../../context/UserContext';
 
 const Header = () => {
   const navigate = useNavigate();
-  const { state } = useUser();
-  const { data, isLoading } = useUserInfo();
+  const { data } = useUserInfo();
+
   const { data: logoutData, logout, isSuccess } = useLogout();
 
   const logoutHandler = () => {
@@ -40,14 +39,20 @@ const Header = () => {
       />
 
       <div className='right-side'>
-        {state.role === 'ADMIN' && <p onClick={addFlight}>Add Flight</p>}
-
         <div className='user-info'>
           <p className='user-name'>
-            {toUppercase(data?.name)} {toUppercase(data?.surname)}
+            {data
+              ? `${toUppercase(data?.name)} ${toUppercase(data?.surname)}`
+              : '-'}
           </p>
-          <p>{data?.balance}$</p>
+          <p>{data?.balance ?? '-'}$</p>
         </div>
+
+        {data?.role === 'ADMIN' && (
+          <button className='myportal-button' onClick={addFlight}>
+            Add Flight
+          </button>
+        )}
 
         <button className='myportal-button'>
           <Link to='/portal'>My Portal</Link>

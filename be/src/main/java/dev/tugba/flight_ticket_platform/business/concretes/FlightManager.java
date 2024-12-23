@@ -3,7 +3,6 @@ package dev.tugba.flight_ticket_platform.business.concretes;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,9 @@ import dev.tugba.flight_ticket_platform.business.responses.GetFilterFlightRespon
 import dev.tugba.flight_ticket_platform.business.responses.GetFlightTicketResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetSellFlightResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetUserFlightResponse;
+import dev.tugba.flight_ticket_platform.core.utilities.exceptions.AuthorizationException;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.FlightNotFoundException;
+import dev.tugba.flight_ticket_platform.core.utilities.exceptions.InvalidCredentialsException;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.SaveToDBException;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.UserNotFoundException;
 import dev.tugba.flight_ticket_platform.dataAccess.abstracts.FlightRepository;
@@ -35,37 +36,50 @@ public class FlightManager implements FlightService {
 
         @Override
         public GetAllFlightResponse getAllFlight(String requestId) {
-                List<Flight> flightList = flightRepository.findAll();
-                GetAllFlightResponse getAllFlightResponse = GetAllFlightResponse.builder()
-                        .datetime(LocalDateTime.now())
-                        .flightDataList(flightList)
-                        .requestId(requestId)
-                        .status(200)
-                        .build();
+                try {
+                        List<Flight> flightList = flightRepository.findAll();
 
-                        return getAllFlightResponse;
+                        if(flightList == null) {
+                                throw new FlightNotFoundException("Flight not found");
+                        }
+                        GetAllFlightResponse getAllFlightResponse = GetAllFlightResponse.builder()
+                                .datetime(LocalDateTime.now())
+                                .flightDataList(flightList)
+                                .requestId(requestId)
+                                .status(200)
+                                .build();
+        
+                                return getAllFlightResponse;
+                } catch (FlightNotFoundException e) {
+                        throw new FlightNotFoundException(e.getMessage());
+                }
+ 
         }
 
         @Override
         public GetFilterFlightResponse searchFlights(String requestId, String departureCity, String arrivalCity, String departureDay) {
-                 List<Flight> flightList = flightRepository.findByDepartureCityAndArrivalCityAndDepartureDay(departureCity, arrivalCity, departureDay).orElseThrow(()-> new FlightNotFoundException("Flight not found"));
-                 List<GetFilterFlight> filterFlightDataList = flightList.stream().map(flight ->  
-                        GetFilterFlight.builder()
-                                .departureCity(flight.getDepartureCity())
-                                .arrivalCity(flight.getArrivalCity())
-                                .id(flight.getId())
-                                .company(flight.getCompany())
-                                .departureDay(flight.getDepartureDay())
-                                .departureHour(flight.getDepartureHour())
-                                .price(flight.getPrice()).build())
-                                        .toList();
+                try {
+                        List<Flight> flightList = flightRepository.findByDepartureCityAndArrivalCityAndDepartureDay(departureCity, arrivalCity, departureDay).orElseThrow(()-> new FlightNotFoundException("Flight not found"));
+                        List<GetFilterFlight> filterFlightDataList = flightList.stream().map(flight ->  
+                                GetFilterFlight.builder()
+                                        .departureCity(flight.getDepartureCity())
+                                        .arrivalCity(flight.getArrivalCity())
+                                        .id(flight.getId())
+                                        .company(flight.getCompany())
+                                        .departureDay(flight.getDepartureDay())
+                                        .departureHour(flight.getDepartureHour())
+                                        .price(flight.getPrice()).build())
+                                                .toList();
 
-                return GetFilterFlightResponse.builder()
-                        .requestId(requestId)
-                        .datetime(LocalDateTime.now())
-                        .filterFlightDataList(filterFlightDataList)
-                        .status(200)
-                        .build();
+                        return GetFilterFlightResponse.builder()
+                                .requestId(requestId)
+                                .datetime(LocalDateTime.now())
+                                .filterFlightDataList(filterFlightDataList)
+                                .status(200)
+                                .build();
+                } catch (FlightNotFoundException e) {
+                        throw new FlightNotFoundException(e.getMessage());
+                }
         }
 
         @Override
@@ -80,7 +94,7 @@ public class FlightManager implements FlightService {
                         Double flightPrice = flight.getPrice();
                         Double userBalance = user.getBalance();
 
-                        if(userBalance < flightPrice) {
+                        if (userBalance < flightPrice) {
                                 throw new RuntimeException("Insufficient balance");
                         } else {
                                 user.setBalance(userBalance - flightPrice);
@@ -90,8 +104,14 @@ public class FlightManager implements FlightService {
                         if (flightTicketIds == null) {
                             flightTicketIds = new ArrayList<>();
                         }
-                        flightTicketIds.add(sellFlightRequest.getFlightId());
-                        user.setFlightTicketIds(flightTicketIds);
+
+                        if (!sellFlightRequest.getFlightId().isEmpty()) {
+                                flightTicketIds.add(sellFlightRequest.getFlightId());
+                                user.setFlightTicketIds(flightTicketIds);
+                        } else {
+                                throw new InvalidCredentialsException("FlightId is required");
+                        }
+                        
 
                         try {
                                 userRepository.save(user);
@@ -110,6 +130,8 @@ public class FlightManager implements FlightService {
                         throw new FlightNotFoundException(e.getMessage());
                 } catch (SaveToDBException e) {
                         throw new SaveToDBException(e.getMessage());
+                } catch (InvalidCredentialsException e) {
+                        throw new InvalidCredentialsException(e.getMessage());
                 } catch (RuntimeException e) {
                         throw new RuntimeException(e.getMessage());
                 } catch (Exception e) {
@@ -124,12 +146,8 @@ public class FlightManager implements FlightService {
 
                         User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new UserNotFoundException("User not found"));
 
-
-                        if(user.getEmail() == null) {
-                                throw new RuntimeException("User not found");
-                        } else if(!user.getEmail().equals("admin@sisal.com")) {
-                                System.out.println("buraya düştü");
-                                throw new RuntimeException("Unauthorized");
+                        if (!user.getEmail().equals("admin@sisal.com")) {
+                                throw new AuthorizationException("Unauthorized");
                         }
 
                         Flight addedFlight = Flight.builder()
@@ -142,11 +160,15 @@ public class FlightManager implements FlightService {
                                                 .price(createFlightTicket.getPrice())
                                                 .build();
         
-                        if(addedFlight == null) {
+                        if (addedFlight == null) {
                                 throw new RuntimeException("Flight not found");
                         }
         
-                        flightRepository.save(addedFlight);
+                        try {
+                                flightRepository.save(addedFlight);
+                        } catch (SaveToDBException e) {
+                                throw new SaveToDBException("An error occurred while saving to the database");
+                        }
         
                         return GetFlightTicketResponse.builder()
                                 .datetime(LocalDateTime.now())
@@ -156,12 +178,15 @@ public class FlightManager implements FlightService {
                         
                 } catch (UserNotFoundException e) {
                         throw new UserNotFoundException("User not found");
+                } catch (AuthorizationException e) {
+                        throw new AuthorizationException("Unauthorized");
+                } catch (SaveToDBException e) {
+                        throw new SaveToDBException("An error occurred while saving to the database");
                 } catch (RuntimeException e) {
                         throw new RuntimeException("Unauthorized");
                 } catch (Exception e) {
                         throw new RuntimeException("An error occurred while adding the flight");
                 }
-               
         }
 
         @Override

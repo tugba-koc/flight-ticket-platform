@@ -13,6 +13,7 @@ import dev.tugba.flight_ticket_platform.business.abstracts.AuthenticateService;
 import dev.tugba.flight_ticket_platform.business.requests.CreateRegisterRequest;
 import dev.tugba.flight_ticket_platform.business.requests.LoginRequest;
 import dev.tugba.flight_ticket_platform.business.requests.UpdatePassword;
+import dev.tugba.flight_ticket_platform.business.responses.GetResetPasswordResponse;
 import dev.tugba.flight_ticket_platform.business.responses.LoginResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -39,7 +40,7 @@ public class AuthenticationController {
     @PostMapping("/reset-password")
     @PreAuthorize("hasAuthority('visitor:create')")
     @CrossOrigin(exposedHeaders = {"Access-Control-Allow-Origin","Access-Control-Allow-Credentials"})
-    public ResponseEntity<String> resetPassword(@RequestHeader("Authorization") String bearerToken, @RequestBody @Valid UpdatePassword updatePassword) {
+    public ResponseEntity<GetResetPasswordResponse> resetPassword(@RequestHeader("Authorization") String bearerToken, @RequestBody @Valid UpdatePassword updatePassword) {
         return ResponseEntity.ok(authenticateService.resetPassword(bearerToken, updatePassword));
     }
 }

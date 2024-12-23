@@ -13,6 +13,7 @@ import dev.tugba.flight_ticket_platform.business.abstracts.AuthenticateService;
 import dev.tugba.flight_ticket_platform.business.requests.CreateRegisterRequest;
 import dev.tugba.flight_ticket_platform.business.requests.LoginRequest;
 import dev.tugba.flight_ticket_platform.business.requests.UpdatePassword;
+import dev.tugba.flight_ticket_platform.business.responses.GetResetPasswordResponse;
 import dev.tugba.flight_ticket_platform.business.responses.LoginResponse;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.AlreadyExistsUserException;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.AuthenticationServiceException;
@@ -66,7 +67,6 @@ public class AuthenticateManager implements AuthenticateService {
                                 } catch (SaveToDBException e) {
                                         throw new SaveToDBException("An unexpected error occurred while saving to the database");
                                 }
-
                         }
                 } catch (AlreadyExistsUserException e) {
                         throw new AlreadyExistsUserException(e.getMessage());
@@ -136,10 +136,9 @@ public class AuthenticateManager implements AuthenticateService {
                 throw new RuntimeException("An unexpected error occurred");
             }
         }
-        
 
         @Override
-        public String resetPassword(String bearerToken, UpdatePassword updatePassword) {
+        public GetResetPasswordResponse resetPassword(String bearerToken, UpdatePassword updatePassword) {
                 try {
                         if(updatePassword.getPassword().isEmpty() || updatePassword.getNewPassword().isEmpty()) {
                                 throw new MissingParameterException("Password fields cannot be empty");
@@ -163,7 +162,11 @@ public class AuthenticateManager implements AuthenticateService {
                         } catch (SaveToDBException e) {
                                 throw new SaveToDBException("An unexpected error occurred while saving to the database");
                         }
-                        return "Password updated successfully";
+                        return GetResetPasswordResponse.builder()
+                                .status(200)
+                                .requestId(updatePassword.getRequestId())
+                                .datetime(LocalDateTime.now())
+                                .build();
                 } catch (MissingParameterException e) {
                         throw new MissingParameterException(e.getMessage());
                 } catch (InvalidCredentialsException e) {
@@ -175,7 +178,5 @@ public class AuthenticateManager implements AuthenticateService {
                 } catch (Exception e) {
                         throw new RuntimeException("An unexpected error occurred");
                 }
-
         }
-
 }

@@ -1,6 +1,5 @@
 package dev.tugba.flight_ticket_platform.business.concretes;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -21,21 +20,28 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class UserManager implements UserService {
         private final UserRepository userRepository;
-
-        private JwtService jwtService;
+        private final JwtService jwtService;
 
         @Override
         public Optional<User> getUserResponse(String bearerToken, CreateUserResponse createUserResponse) {
-                String userEmail = jwtService.extractUsername(bearerToken);
-                return userRepository.findByEmail(userEmail);
+                try {
+                        String userEmail = jwtService.extractUsername(bearerToken);
+                        return userRepository.findByEmail(userEmail);
+                } catch (UserNotFoundException e) {
+                        throw new UserNotFoundException("User not found");
+                }
         }
 
         @Override
         public GetDepositResponse deposit(String bearerToken, CreateDepositRequest createDepositRequest) {
                 String userEmail = jwtService.extractUsername(bearerToken);
-                User user = userRepository.findByEmail(userEmail).orElseThrow(()-> new UserNotFoundException("User not found"));
+
+                User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new UserNotFoundException("User not found"));
+
                 user.setBalance(createDepositRequest.getAmount());
+
                 userRepository.save(user);
+
                 return GetDepositResponse.builder()
                         .datetime(LocalDateTime.now())
                         .requestId(createDepositRequest.getRequestId())
@@ -47,7 +53,9 @@ public class UserManager implements UserService {
         @Override
         public GetUserInfoResponse getUserInfo(String bearerToken, String requestId) {
                 String userEmail = jwtService.extractUsername(bearerToken);
-                User user = userRepository.findByEmail(userEmail).orElseThrow(()-> new UserNotFoundException("User not found"));
+
+                User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new UserNotFoundException("User not found"));
+
                 return GetUserInfoResponse.builder()
                         .email(user.getEmail())
                         .name(user.getName())
@@ -55,6 +63,7 @@ public class UserManager implements UserService {
                         .balance(user.getBalance())
                         .phoneNumber(user.getPhoneNumber())
                         .datetime(LocalDateTime.now())
+                        .role(user.getRole().name())
                         .requestId(requestId)
                         .status(200)
                         .build();

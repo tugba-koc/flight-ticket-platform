@@ -9,7 +9,11 @@ export const fetchRegister = async (body) => {
 
 export const fetchLogin = async (body) => {
   const url = `${import.meta.env.VITE_BASE_URL}/api/v1/auth/login`;
-  const res = await instancePost.post(url, body);
+  const data = {
+    ...body,
+    requestId: uuid4(),
+  };
+  const res = await instancePost.post(url, data);
   return res.data;
 };
 
