@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { useAddFlight } from '../../hooks/useAddFlight';
+import './addFlight.css';
 
 const cities = ['İstanbul', 'Ankara', 'İzmir', 'Erzurum', 'Trabzon'];
 
 const AddFlight = () => {
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     flightNumber: '',
     departureCity: '',
@@ -15,7 +16,9 @@ const AddFlight = () => {
     price: '',
   });
 
-  const { addFlight } = useAddFlight(formData);
+  const { data, addFlight, error: addFlightError } = useAddFlight(formData);
+
+  const BUTTON_DISABLED = !formData.flightNumber || !formData.price;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,11 +33,29 @@ const AddFlight = () => {
     addFlight();
   };
 
+  useEffect(() => {
+    setError(addFlightError);
+  }, [addFlightError]);
+
+  useEffect(() => {
+    if (data) {
+      setFormData({
+        flightNumber: '',
+        departureCity: '',
+        arrivalCity: '',
+        company: '',
+        departureDay: '',
+        departureHour: '',
+        price: '',
+      });
+    }
+  }, [data]);
+
   return (
     <div style={{ maxWidth: '500px', margin: '0 auto' }}>
       <h2>Add Flight</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
+      <form id='addFlight' onSubmit={handleSubmit}>
+        <div className='input-wrapper'>
           <input
             type='text'
             name='flightNumber'
@@ -44,7 +65,7 @@ const AddFlight = () => {
             required
           />
         </div>
-        <div>
+        <div className='input-wrapper'>
           <select
             name='departureCity'
             value={formData.departureCity}
@@ -58,7 +79,7 @@ const AddFlight = () => {
             ))}
           </select>
         </div>
-        <div>
+        <div className='input-wrapper'>
           <select
             name='arrivalCity'
             value={formData.arrivalCity}
@@ -72,7 +93,7 @@ const AddFlight = () => {
             ))}
           </select>
         </div>
-        <div>
+        <div className='input-wrapper'>
           <input
             type='text'
             name='company'
@@ -82,7 +103,7 @@ const AddFlight = () => {
             required
           />
         </div>
-        <div>
+        <div className='input-wrapper'>
           <input
             type='date'
             name='departureDay'
@@ -91,7 +112,7 @@ const AddFlight = () => {
             required
           />
         </div>
-        <div>
+        <div className='input-wrapper'>
           <input
             type='time'
             name='departureHour'
@@ -100,7 +121,7 @@ const AddFlight = () => {
             required
           />
         </div>
-        <div>
+        <div className='input-wrapper'>
           <input
             type='number'
             name='price'
@@ -110,7 +131,10 @@ const AddFlight = () => {
             required
           />
         </div>
-        <button type='submit'>Save Flight</button>
+        {error && <p className='error-message'>{error?.errors}</p>}
+        <button disabled={BUTTON_DISABLED} type='submit'>
+          Save Flight
+        </button>
       </form>
     </div>
   );

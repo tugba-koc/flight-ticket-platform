@@ -38,11 +38,4 @@ public class UserController {
     public ResponseEntity<GetUserInfoResponse> getUserInfo(@RequestHeader("Authorization") String bearerToken, @RequestParam String requestId) {
         return ResponseEntity.ok(userService.getUserInfo(bearerToken, requestId));
     }
-
-/*     @PostMapping
-    @PreAuthorize("hasAuthority('visitor:create')")
-    @CrossOrigin(exposedHeaders = {"Access-Control-Allow-Origin","Access-Control-Allow-Credentials"})
-    public ResponseEntity<Optional<User>> getUserResponse(@RequestHeader("Authorization") String bearerToken, @RequestBody CreateUserResponse createUserResponse) {
-        return ResponseEntity.ok(userService.getUserResponse(bearerToken, createUserResponse));
-    } */
 }

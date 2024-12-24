@@ -23,12 +23,12 @@ public class UserManager implements UserService {
         private final JwtService jwtService;
 
         @Override
-        public Optional<User> getUserResponse(String bearerToken, CreateUserResponse createUserResponse) {
+        public User getUserResponse(String bearerToken, CreateUserResponse createUserResponse) {
                 try {
                         String userEmail = jwtService.extractUsername(bearerToken);
-                        return userRepository.findByEmail(userEmail);
+                        return userRepository.findByEmail(userEmail).orElseThrow(()-> new UserNotFoundException("User not found"));
                 } catch (UserNotFoundException e) {
-                        throw new UserNotFoundException("User not found");
+                        throw new UserNotFoundException(e.getMessage());
                 }
         }
 
