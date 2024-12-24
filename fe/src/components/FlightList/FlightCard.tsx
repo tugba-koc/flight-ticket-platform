@@ -1,9 +1,11 @@
 import React from 'react';
 import { useFlightTicket } from '../../hooks/useFlightTicket';
 import './flightCard.css';
+import { useUserInfo } from '../../hooks/useUserInfo';
 
 const FlightList = ({ flight, key }) => {
-  const { getFlightTicket } = useFlightTicket(flight.id);
+  const { refetch: userInfoFetch } = useUserInfo();
+  const { getFlightTicket } = useFlightTicket(flight.id, userInfoFetch);
 
   const purchaseFlightTicket = () => {
     getFlightTicket();

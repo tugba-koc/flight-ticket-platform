@@ -107,7 +107,7 @@ export const fetchFilterFlight = async (
   return res.data;
 };
 
-export const fetchFlightTicket = async (flightId) => {
+export const fetchBuyFlightTicket = async (flightId) => {
   const url = `${import.meta.env.VITE_BASE_URL}/api/v1/flight/sell`;
   const data = {
     flightId,

@@ -11,11 +11,11 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class CreateDepositRequest {
-        @NotNull
-        @NotEmpty
+        @NotNull(message = "requestId cannot be null")
+        @NotEmpty(message = "requestId cannot be empty")
         private String requestId;
 
-        @NotNull
-        @Positive
+        @NotNull(message = "amount cannot be null")
+        @Positive(message = "amount must be positive")
         private Double amount;
 }

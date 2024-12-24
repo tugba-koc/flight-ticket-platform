@@ -1,11 +1,14 @@
 import { useMutation } from '@tanstack/react-query';
-import { fetchFlightTicket } from '../services';
+import { fetchBuyFlightTicket } from '../services';
 
-export const useFlightTicket = (flightId) => {
+export const useFlightTicket = (flightId, userInfoFetch) => {
   const mutation = useMutation({
     mutationFn: async () => {
-      const result = await fetchFlightTicket(flightId);
+      const result = await fetchBuyFlightTicket(flightId);
       return result;
+    },
+    onSuccess: () => {
+      userInfoFetch();
     },
     retry: false,
   });

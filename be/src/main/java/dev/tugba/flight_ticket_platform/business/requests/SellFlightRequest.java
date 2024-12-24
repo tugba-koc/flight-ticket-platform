@@ -9,9 +9,12 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-@NotNull
-@NotEmpty
 public class SellFlightRequest {
+        @NotEmpty(message = "requestId cannot be empty")
+        @NotNull(message = "requestId cannot be null")
         private String requestId;
+
+        @NotEmpty(message = "flightId cannot be empty")
+        @NotNull(message = "flightId cannot be null")
         private String flightId;
 }

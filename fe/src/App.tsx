@@ -10,10 +10,12 @@ import BalanceEdit from './components/BalanceEdit/BalanceEdit';
 import FlightTickets from './components/FlightTickets/FlightTickets';
 import AddFlight from './layouts/AddFlight/AddFlight';
 import Footer from './components/Footer/Footer';
+import Loader from './components/Loader/Loader';
 
 function App() {
   return (
-    <>
+    <div className='App'>
+      <Loader />
       <Routes>
         <Route path='/' element={<AuthLayout />}>
           <Route path='/register' element={<Registration />} />
@@ -34,7 +36,7 @@ function App() {
         <Route path='*' element={<h1>Not Found</h1>} />
       </Routes>
       <Footer />
-    </>
+    </div>
   );
 }
 
