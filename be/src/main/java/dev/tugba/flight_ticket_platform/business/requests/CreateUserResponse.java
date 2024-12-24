@@ -9,9 +9,12 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-@NotNull
-@NotEmpty
 public class CreateUserResponse {
+        @NotNull(message = "requestId cannot be null")
+        @NotEmpty(message = "requestId cannot be empty")
         String requestId;
+
+        @NotNull(message = "ipAddress cannot be null")
+        @NotEmpty(message = "ipAddress cannot be empty")
         String ipAddress;
 }

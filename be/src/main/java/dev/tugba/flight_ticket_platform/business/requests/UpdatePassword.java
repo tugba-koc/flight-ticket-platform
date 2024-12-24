@@ -9,10 +9,16 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-@NotNull
-@NotEmpty
 public class UpdatePassword {
+        @NotNull(message = "password cannot be null")
+        @NotEmpty(message = "password cannot be empty")
         private String password;
+
+        @NotNull(message = "newPassword cannot be null")
+        @NotEmpty(message = "newPassword cannot be empty")
         private String newPassword;
+
+        @NotNull(message = "requestId cannot be null")
+        @NotEmpty(message = "requestId cannot be empty")
         private String requestId;
 }
