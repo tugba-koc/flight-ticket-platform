@@ -4,17 +4,13 @@ import './balanceEdit.css';
 import { useUserInfo } from '../../hooks/useUserInfo';
 
 const BalanceEdit = () => {
-  const { data: userInfo, isLoading } = useUserInfo();
+  const { data: userInfo } = useUserInfo();
 
   const [balance, setBalance] = useState(100);
   const [newBalance, setNewBalance] = useState('');
   const [error, setError] = useState('');
 
-  const {
-    data: depositData,
-    deposit,
-    error: errorDeposit,
-  } = useDeposit(newBalance);
+  const { data: depositData, deposit, error: errorDeposit } = useDeposit(newBalance);
 
   const handleInputChange = (e) => {
     const value = e.target.value;

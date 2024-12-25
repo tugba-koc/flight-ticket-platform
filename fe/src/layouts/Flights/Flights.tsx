@@ -14,13 +14,7 @@ const Flights = () => {
     maxPrice: '',
   });
 
-  const {
-    data: allFlightData,
-    refetch,
-    isLoading,
-    error,
-    isSuccess,
-  } = useFlightAll();
+  const { data: allFlightData, isSuccess } = useFlightAll();
 
   const { refetch: callFilterFlight, data: filterFlight } = useFilterFlight({
     departureCity: filters.departureCity,
