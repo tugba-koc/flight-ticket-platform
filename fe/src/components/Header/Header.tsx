@@ -21,7 +21,7 @@ const Header = () => {
   useEffect(() => {
     if (logoutData && isSuccess) {
       localStorage.removeItem('token');
-      navigate('/login');
+      navigate('/');
     }
   }, [logoutData, isSuccess, navigate]);
 
@@ -39,27 +39,35 @@ const Header = () => {
       />
 
       <div className='right-side'>
-        <div className='user-info'>
-          <p className='user-name'>
-            {data
-              ? `${toUppercase(data?.name)} ${toUppercase(data?.surname)}`
-              : '-'}
-          </p>
-          <p>{data?.balance ?? '-'}$</p>
-        </div>
+        {localStorage.getItem('token') ? (
+          <>
+            <div className='user-info'>
+              <p className='user-name'>
+                {data
+                  ? `${toUppercase(data?.name)} ${toUppercase(data?.surname)}`
+                  : '-'}
+              </p>
+              <p>{data?.balance ?? '-'}$</p>
+            </div>
 
-        {data?.role === 'ADMIN' && (
-          <button className='myportal-button' onClick={addFlight}>
-            Add Flight
+            {data?.role === 'ADMIN' && (
+              <button className='myportal-button' onClick={addFlight}>
+                Add Flight
+              </button>
+            )}
+
+            <button className='myportal-button'>
+              <Link to='/portal'>My Portal</Link>
+            </button>
+            <button className='logout-button' onClick={logoutHandler}>
+              logout
+            </button>
+          </>
+        ) : (
+          <button className='myportal-button'>
+            <Link to='/auth/login'>Login</Link>
           </button>
         )}
-
-        <button className='myportal-button'>
-          <Link to='/portal'>My Portal</Link>
-        </button>
-        <button className='logout-button' onClick={logoutHandler}>
-          logout
-        </button>
       </div>
     </div>
   );

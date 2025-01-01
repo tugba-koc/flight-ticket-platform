@@ -37,7 +37,7 @@ const Login = () => {
     if (loginData?.token !== null && loginData?.token !== undefined) {
       localStorage.setItem('token', loginData.token);
       dispatch({ type: 'SET_ROLE', payload: loginData.role });
-      navigate('/flights');
+      navigate('/');
     }
   }, [navigate, loginData, dispatch]);
 
@@ -92,7 +92,7 @@ const Login = () => {
           <div className='registration-link'>
             <p>You have already signed Up?</p>
             <span>
-              <Link to='/register'>Register</Link>
+              <Link to='/auth/register'>Register</Link>
             </span>
           </div>
         </form>

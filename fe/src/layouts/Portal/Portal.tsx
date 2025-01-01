@@ -9,7 +9,7 @@ const Portal = () => {
     <>
       <div className='header-container'>
         <img
-          onClick={() => navigate('/flights')}
+          onClick={() => navigate('/')}
           width={70}
           height={'auto'}
           src='https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-original-577x577/s3/032014/untitled-1_70.png?itok=yv_awhaU'

@@ -17,12 +17,12 @@ function App() {
     <div className='App'>
       <Loader />
       <Routes>
-        <Route path='/' element={<AuthLayout />}>
-          <Route path='/register' element={<Registration />} />
+        <Route path='/auth' element={<AuthLayout />}>
+          <Route path='register' element={<Registration />} />
           <Route path='login' element={<Login />} />
         </Route>
 
-        <Route path='/flights' element={<Flights />} />
+        <Route path='/' element={<Flights />} />
 
         <Route path='/portal' element={<Portal />}>
           <Route index element={<PasswordChange />} />

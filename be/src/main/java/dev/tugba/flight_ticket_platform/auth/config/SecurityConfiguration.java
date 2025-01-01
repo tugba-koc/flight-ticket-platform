@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -38,6 +39,9 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserService userService;
 
+    @Autowired
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
     private final CustomLogoutHandler logoutHandler;
 
     @Bean
@@ -56,6 +60,7 @@ public class SecurityConfiguration {
                     return corsConfig;
                 }))
             .csrf(AbstractHttpConfigurer::disable)
+            .exceptionHandling(t -> t.authenticationEntryPoint(customAuthenticationEntryPoint))
             .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                 .requestMatchers("/api/v1/user/deposit").hasAnyAuthority(Permission.VISITOR_UPDATE.getPermission())
                 .requestMatchers("/api/v1/user/info").hasAnyAuthority(Permission.VISITOR_READ.getPermission(), Permission.ADMIN_READ.getPermission())

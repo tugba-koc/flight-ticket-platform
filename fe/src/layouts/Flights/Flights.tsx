@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../components/Header/Header';
 import { useFlightAll } from '../../hooks/useFlightAll';
 import './flights.css';
@@ -14,6 +14,8 @@ const Flights = () => {
     maxPrice: '',
   });
 
+  const [filterFlightData, setfilterFlightData] = useState([]);
+
   const { data: allFlightData, isSuccess } = useFlightAll();
 
   const { refetch: callFilterFlight, data: filterFlight } = useFilterFlight({
@@ -21,6 +23,12 @@ const Flights = () => {
     arrivalCity: filters.arrivalCity,
     departureDay: filters.date,
   });
+
+  useEffect(() => {
+    if (filterFlight) {
+      setfilterFlightData(filterFlight);
+    }
+  }, [filterFlight]);
 
   return (
     <>
@@ -42,14 +50,18 @@ const Flights = () => {
         </aside>
         {isSuccess && (filterFlight || allFlightData) && (
           <div className='flights'>
-            {filterFlight?.filterFlightDataList?.length > 0
-              ? filterFlight?.filterFlightDataList.map((flight) => (
-                  <FlightList flight={flight} key={flight.id} />
-                ))
-              : isSuccess &&
-                allFlightData?.flightDataList.map((flight) => (
-                  <FlightList flight={flight} key={flight.id} />
-                ))}
+            {filterFlightData?.filterFlightDataList?.length > 0 ? (
+              filterFlightData?.filterFlightDataList.map((flight) => (
+                <FlightList flight={flight} key={flight.id} />
+              ))
+            ) : filterFlightData?.filterFlightDataList?.length === 0 ? (
+              <p>BOŞ</p>
+            ) : (
+              isSuccess &&
+              allFlightData?.flightDataList.map((flight) => (
+                <FlightList flight={flight} key={flight.id} />
+              ))
+            )}
           </div>
         )}
       </div>

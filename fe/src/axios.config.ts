@@ -24,9 +24,11 @@ instanceGet.interceptors.response.use(
     return response;
   },
   function (error) {
-    console.log('error ==> ', error);
-
-    const standardError = error.response.data;
+    const standardError = {
+      errors: error.response.data,
+      status: error.response.status,
+    };
+    console.log('error >>> ', standardError);
     return Promise.reject(standardError);
   }
 );
@@ -40,8 +42,11 @@ instancePost.interceptors.response.use(
     return response;
   },
   function (error) {
-    console.log('error ==> ', error);
-    const standardError = error.response.data;
+    const standardError = {
+      errors: error.response.data,
+      status: error.response.status,
+    };
+    console.log('error >>> ', standardError);
     return Promise.reject(standardError);
   }
 );

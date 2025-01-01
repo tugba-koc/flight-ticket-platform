@@ -14,7 +14,6 @@ import dev.tugba.flight_ticket_platform.entities.concretes.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -71,10 +70,6 @@ public class JwtManager implements JwtService {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-        } catch (MalformedJwtException e) {
-            throw new MalformedJwtException("Invalid JWT format");
-        } catch (ExpiredJwtException e) {
-            throw new ExpiredJwtException(null, null, "JWT expired");
         } catch (Exception e) {
             throw new RuntimeException("JWT processing error");
         }

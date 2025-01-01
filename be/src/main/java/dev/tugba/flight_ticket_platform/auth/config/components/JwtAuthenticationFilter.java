@@ -13,6 +13,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import dev.tugba.flight_ticket_platform.auth.config.abstracts.JwtService;
 import dev.tugba.flight_ticket_platform.auth.config.abstracts.UserService;
+import dev.tugba.flight_ticket_platform.core.utilities.exceptions.AuthorizationException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,6 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
 
                 jwt = authHeader.substring(7);
+
                 username = jwtService.extractUsername(jwt);
                 // it is safe to have a static util method to get the currently logged in user from SecurityContextHolder
                 if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
@@ -55,6 +57,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         );
                         securityContext.setAuthentication(authToken);
                         SecurityContextHolder.setContext(securityContext);
+                    } else {
+                        throw new AuthorizationException("Token expired");
                     }
                 }
                 filterChain.doFilter(request, response);

@@ -15,17 +15,19 @@ import { UserProvider } from './context/UserContext.tsx';
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error) => {
-      if (error?.status === 403) {
+      console.log(error);
+      if (error?.status === 403 || error?.status === 401) {
         localStorage.clear();
-        window.location.href = '/login';
+        window.location.href = '/auth/login';
       }
     },
   }),
   mutationCache: new MutationCache({
     onError: (error) => {
-      if (error?.status === 403) {
+      console.log(error);
+      if (error?.status === 403 || error?.status === 401) {
         localStorage.clear();
-        window.location.href = '/login';
+        window.location.href = '/auth/login';
       }
     },
   }),

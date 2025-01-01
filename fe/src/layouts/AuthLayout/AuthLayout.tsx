@@ -7,7 +7,7 @@ const AuthLayout = () => {
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
-      navigate('/flights', { replace: true });
+      navigate('/', { replace: true });
     }
   }, [navigate]);
 
