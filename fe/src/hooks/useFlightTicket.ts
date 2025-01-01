@@ -1,7 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { fetchBuyFlightTicket } from '../services';
 
-export const useFlightTicket = (flightId, userInfoFetch) => {
+export const useFlightTicket = (
+  flightId,
+  userInfoFetch,
+  userFlightListFetch
+) => {
   const mutation = useMutation({
     mutationFn: async () => {
       const result = await fetchBuyFlightTicket(flightId);
@@ -9,6 +13,7 @@ export const useFlightTicket = (flightId, userInfoFetch) => {
     },
     onSuccess: () => {
       userInfoFetch();
+      userFlightListFetch();
     },
     retry: false,
   });
@@ -16,7 +21,7 @@ export const useFlightTicket = (flightId, userInfoFetch) => {
   return {
     data: mutation.data,
     getFlightTicket: mutation.mutate,
-    isLoading: mutation.isLoading,
     error: mutation.error,
+    isSuccess: mutation.isSuccess,
   };
 };

@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useResetPassword } from '../../hooks/useResetPassword';
 import './passwordChange.css';
+import { useUser } from '../../context/UserContext';
 
 const PasswordChange = () => {
+  const { dispatch } = useUser();
+
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
 
-  const { data: resetPasswordData, resetPassword } = useResetPassword({
+  const {
+    data: resetPasswordData,
+    resetPassword,
+    isSuccess,
+  } = useResetPassword({
     password,
     confirmPassword,
   });
@@ -22,8 +29,11 @@ const PasswordChange = () => {
   };
 
   useEffect(() => {
-    setConfirmPassword('');
-    setPassword('');
+    if (resetPasswordData && isSuccess) {
+      setConfirmPassword('');
+      setPassword('');
+      dispatch({ type: 'SET_MODAL', payload: true });
+    }
   }, [resetPasswordData]);
 
   const BUTTON_DISABLED = !password || !confirmPassword;

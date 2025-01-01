@@ -3,7 +3,7 @@ import { fetchUserInfo } from '../services';
 
 export const useUserInfo = () => {
   const { data, refetch, isLoading, error } = useQuery({
-    queryKey: ['userInfo'],
+    queryKey: ['userInfo', localStorage.getItem('token')],
     queryFn: async () => {
       const result = await fetchUserInfo();
       return result;

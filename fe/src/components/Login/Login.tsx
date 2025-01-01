@@ -84,7 +84,7 @@ const Login = () => {
               required
             />
           </div>
-          {error && <p className='error-message'>{error?.errors}</p>}
+          {error && <p className='error-message'>{error?.error}</p>}
           <button disabled={BUTTON_DISABLED} type='submit'>
             Submit
           </button>

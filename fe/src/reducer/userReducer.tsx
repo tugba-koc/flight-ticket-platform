@@ -1,6 +1,6 @@
 export const userInitialState = {
   role: '',
-  isLoggedIn: false,
+  isModalOpen: false,
 };
 
 export const userReducer = (state = userInitialState, action) => {
@@ -10,10 +10,10 @@ export const userReducer = (state = userInitialState, action) => {
         ...state,
         role: action.payload,
       };
-    case 'SET_LOGIN':
+    case 'SET_MODAL':
       return {
         ...state,
-        isLoggedIn: action.payload,
+        isModalOpen: action.payload,
       };
     default:
       return state;

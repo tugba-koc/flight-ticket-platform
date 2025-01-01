@@ -11,11 +11,13 @@ import FlightTickets from './components/FlightTickets/FlightTickets';
 import AddFlight from './layouts/AddFlight/AddFlight';
 import Footer from './components/Footer/Footer';
 import Loader from './components/Loader/Loader';
+import Modal from './components/Modal/Modal';
 
 function App() {
   return (
     <div className='App'>
       <Loader />
+      <Modal />
       <Routes>
         <Route path='/auth' element={<AuthLayout />}>
           <Route path='register' element={<Registration />} />

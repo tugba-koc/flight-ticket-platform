@@ -2,15 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { useDeposit } from '../../hooks/useDeposit';
 import './balanceEdit.css';
 import { useUserInfo } from '../../hooks/useUserInfo';
+import { useUser } from '../../context/UserContext';
 
 const BalanceEdit = () => {
   const { data: userInfo } = useUserInfo();
+
+  const { dispatch } = useUser();
 
   const [balance, setBalance] = useState(100);
   const [newBalance, setNewBalance] = useState('');
   const [error, setError] = useState('');
 
-  const { data: depositData, deposit, error: errorDeposit } = useDeposit(newBalance);
+  const {
+    data: depositData,
+    deposit,
+    error: errorDeposit,
+  } = useDeposit(newBalance);
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -44,6 +51,7 @@ const BalanceEdit = () => {
       setBalance(depositData?.newAmount);
       setNewBalance('');
       setError('');
+      dispatch({ type: 'SET_MODAL', payload: true });
     }
   }, [depositData]);
 

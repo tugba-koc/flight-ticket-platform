@@ -9,10 +9,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import dev.tugba.flight_ticket_platform.auth.config.abstracts.JwtService;
+import dev.tugba.flight_ticket_platform.core.utilities.exceptions.AuthorizationException;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.TokenCreationException;
 import dev.tugba.flight_ticket_platform.entities.concretes.User;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -31,7 +31,7 @@ public class JwtManager implements JwtService {
                 .setSubject(user.getEmail())
                 .claim("userId", user.getId())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24 * 90))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
                 .signWith(getSigninKey(),SignatureAlgorithm.HS256)
                 .compact();
         } catch (TokenCreationException e) {
@@ -62,7 +62,6 @@ public class JwtManager implements JwtService {
         if(token.startsWith("Bearer ")) {
             token = token.substring(7);
         }
-        // TODO: we can not see the error message in response
         try {
             return Jwts
                 .parserBuilder()
@@ -71,7 +70,7 @@ public class JwtManager implements JwtService {
                 .parseClaimsJws(token)
                 .getBody();
         } catch (Exception e) {
-            throw new RuntimeException("JWT processing error");
+            throw new AuthorizationException("Error while extracting claims from token");
         }
     }
     

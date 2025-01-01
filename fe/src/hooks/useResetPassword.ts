@@ -15,5 +15,6 @@ export const useResetPassword = (data) => {
     resetPassword: mutation.mutate,
     isLoading: mutation.isLoading,
     error: mutation.error,
+    isSuccess: mutation.isSuccess,
   };
 };

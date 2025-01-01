@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFlightTicket } from '../../hooks/useFlightTicket';
 import './flightCard.css';
 import { useUserInfo } from '../../hooks/useUserInfo';
+import { useUser } from '../../context/UserContext';
+import { useUserFlightList } from '../../hooks/useUserFlightList';
 
 const FlightList = ({ flight, key }) => {
+  const { dispatch } = useUser();
+
   const { refetch: userInfoFetch } = useUserInfo();
-  const { getFlightTicket } = useFlightTicket(flight.id, userInfoFetch);
+  const { refetch: userFlightListFetch } = useUserFlightList();
+  const { getFlightTicket, isSuccess } = useFlightTicket(
+    flight.id,
+    userInfoFetch,
+    userFlightListFetch
+  );
 
   const purchaseFlightTicket = () => {
     getFlightTicket();
   };
+
+  useEffect(() => {
+    console.log('isSuccess', isSuccess);
+    if (isSuccess) dispatch({ type: 'SET_MODAL', payload: isSuccess });
+  }, [dispatch, isSuccess]);
 
   return (
     <div className='flightCard' key={key}>

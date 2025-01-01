@@ -95,6 +95,7 @@ public class FlightManager implements FlightService {
                         Double userBalance = user.getBalance();
 
                         if (userBalance < flightPrice) {
+                                // TODO: it sould not be a runtime exception, pls change it
                                 throw new RuntimeException("Insufficient balance");
                         } else {
                                 user.setBalance(userBalance - flightPrice);

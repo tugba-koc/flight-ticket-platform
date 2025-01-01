@@ -169,7 +169,7 @@ const Registration = () => {
               <option value='other'>Other</option>
             </select>
           </div>
-          {error && <p className='error-message'>{error?.errors}</p>}
+          {error && <p className='error-message'>{error?.error}</p>}
           <button disabled={BUTTON_DISABLED} type='submit'>
             Submit
           </button>

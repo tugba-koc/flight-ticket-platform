@@ -2,13 +2,6 @@ import React from 'react';
 import { useUserFlightList } from '../../hooks/useUserFlightList';
 import './flightTickets.css';
 
-/* "departureCity": "Ankara",
-"arrivalCity": "İstanbul",
-"price": 299.0,
-"company": "THY",
-"departureDay": "2024-12-16",
-"departureHour": "14:30:00" */
-
 const FlightTicketCard = ({ ticket }) => {
   return (
     <div className='flightCardTicket'>
