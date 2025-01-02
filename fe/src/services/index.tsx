@@ -141,9 +141,36 @@ export const fetchUserFlightList = async () => {
   const url = `${
     import.meta.env.VITE_BASE_URL
   }/api/v1/flights/list?requestId=${requestId}`;
+
   const res = await instanceGet.get(url, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  });
+  return res.data;
+};
+
+export const fetchValidateEmail = async (email) => {
+  const requestId = uuid4();
+  const url = `${
+    import.meta.env.VITE_BASE_URL
+  }/validator/validateEmail?email=${email}&requestId=${requestId}`;
+  const res = await instanceGet.get(url);
+  return res.data;
+};
+
+export const fetchRemoveFlightTicket = async (flightTicketId) => {
+  const url = `${import.meta.env.VITE_BASE_URL}/api/v1/flight/remove`;
+  const data = {
+    flightTicketId,
+    requestId: uuid4(),
+  };
+
+  const token = localStorage.getItem('token');
+
+  const res = await instancePost.post(url, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
   });
   return res.data;

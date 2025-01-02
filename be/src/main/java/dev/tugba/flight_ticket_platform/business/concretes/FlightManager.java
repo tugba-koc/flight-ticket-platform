@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 import dev.tugba.flight_ticket_platform.auth.config.abstracts.JwtService;
 import dev.tugba.flight_ticket_platform.business.abstracts.FlightService;
 import dev.tugba.flight_ticket_platform.business.requests.CreateFlightTicket;
+import dev.tugba.flight_ticket_platform.business.requests.RemoveFlightTicket;
 import dev.tugba.flight_ticket_platform.business.requests.SellFlightRequest;
 import dev.tugba.flight_ticket_platform.business.responses.GetAllFlightResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetFilterFlight;
 import dev.tugba.flight_ticket_platform.business.responses.GetFilterFlightResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetFlightTicketResponse;
+import dev.tugba.flight_ticket_platform.business.responses.GetRemoveFlightTicket;
 import dev.tugba.flight_ticket_platform.business.responses.GetSellFlightResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetUserFlightResponse;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.AuthorizationException;
@@ -233,6 +235,45 @@ public class FlightManager implements FlightService {
                         throw new RuntimeException(e.getMessage());
                 } catch (Exception e) {
                         throw new RuntimeException(e.getMessage());
+                }
+        }
+
+        @Override
+        public GetRemoveFlightTicket removeFlightTicket(String token, RemoveFlightTicket removeFlightTicket) {
+                try {
+                        String userEmail = jwtService.extractUsername(token);
+
+                        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new UserNotFoundException("User not found"));
+
+                        List<String> flightTicketIds = user.getFlightTicketIds();
+                        if (flightTicketIds == null) {
+                                throw new RuntimeException("Flight not found");
+                        }
+
+                        if (flightTicketIds.contains(removeFlightTicket.getFlightTicketId())) {
+                                flightTicketIds.remove(removeFlightTicket.getFlightTicketId());
+                                user.setFlightTicketIds(flightTicketIds);
+                        } else {
+                                throw new RuntimeException("Flight not found");
+                        }
+
+                        try {
+                                userRepository.save(user);
+                        } catch (SaveToDBException e) {
+                                throw new SaveToDBException("An error occurred while saving to the database");
+                        }
+
+                        return GetRemoveFlightTicket.builder()
+                                .datetime(LocalDateTime.now())
+                                .status(200)
+                                .requestId(removeFlightTicket.getRequestId())
+                                .build();
+                } catch (UserNotFoundException e) {
+                        throw new UserNotFoundException(e.getMessage());
+                } catch (RuntimeException e) {
+                        throw new RuntimeException(e.getMessage());
+                } catch (Exception e) {
+                        throw new RuntimeException("An error occurred while removing the flight");
                 }
         }
 }

@@ -16,7 +16,7 @@ export const useFilterFlight = ({
       );
       return result;
     },
-    enabled: false,
+    enabled: false, // just trigger refetch, not component mount
     retry: false,
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 5,

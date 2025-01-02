@@ -5,6 +5,7 @@ import './flights.css';
 import FlightList from '../../components/FlightList/FlightCard';
 import FlightFilter from '../../components/FlightFilter/FlightFilter';
 import { useFilterFlight } from '../../hooks/useFilterFlight';
+import NoFlight from '../../components/NoFlight/NoFlight';
 
 const Flights = () => {
   const [filters, setFilters] = useState({
@@ -55,7 +56,7 @@ const Flights = () => {
                 <FlightList flight={flight} key={flight.id} />
               ))
             ) : filterFlightData?.filterFlightDataList?.length === 0 ? (
-              <p>BOŞ</p>
+              <NoFlight />
             ) : (
               isSuccess &&
               allFlightData?.flightDataList.map((flight) => (

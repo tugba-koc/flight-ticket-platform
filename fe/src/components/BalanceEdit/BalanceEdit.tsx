@@ -55,6 +55,8 @@ const BalanceEdit = () => {
     }
   }, [depositData]);
 
+  const BTN_DISABLED = newBalance === '' || errorDeposit;
+
   return (
     <div>
       <h2>Balance Management</h2>
@@ -73,7 +75,9 @@ const BalanceEdit = () => {
           />
         </div>
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <button type='submit'>Deposit</button>
+        <button disabled={BTN_DISABLED} type='submit'>
+          Deposit
+        </button>
       </form>
     </div>
   );

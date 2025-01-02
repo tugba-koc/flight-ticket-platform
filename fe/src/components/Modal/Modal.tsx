@@ -19,8 +19,8 @@ const Modal = () => {
         <span onClick={handleCloseModal} class='close'>
           &times;
         </span>
-        <h4>SUCCESS!</h4>
-        <p>It's done!</p>
+        <h4>Success!</h4>
+        <p>Your operation has been successfully completed.</p>
       </div>
     </div>
   );

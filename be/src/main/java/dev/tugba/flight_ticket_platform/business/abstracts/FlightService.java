@@ -1,10 +1,12 @@
 package dev.tugba.flight_ticket_platform.business.abstracts;
 
 import dev.tugba.flight_ticket_platform.business.requests.CreateFlightTicket;
+import dev.tugba.flight_ticket_platform.business.requests.RemoveFlightTicket;
 import dev.tugba.flight_ticket_platform.business.requests.SellFlightRequest;
 import dev.tugba.flight_ticket_platform.business.responses.GetAllFlightResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetFilterFlightResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetFlightTicketResponse;
+import dev.tugba.flight_ticket_platform.business.responses.GetRemoveFlightTicket;
 import dev.tugba.flight_ticket_platform.business.responses.GetSellFlightResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetUserFlightResponse;
 
@@ -14,4 +16,5 @@ public interface FlightService {
         GetSellFlightResponse sellFlight(String token, SellFlightRequest sellFlightRequest);
         GetFlightTicketResponse addFlight(String token, CreateFlightTicket createFlightTicket);
         GetUserFlightResponse listUserFlights(String token, String requestId);
+        GetRemoveFlightTicket removeFlightTicket(String token, RemoveFlightTicket removeFlightTicket);
 }

@@ -74,6 +74,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(getErrorsMap(error, "Missing Parameter Exception", HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<Map<String, Object>> handleValidationException(ValidationException ex) {
+        String error = ex.getMessage();
+        return new ResponseEntity<>(getErrorsMap(error, "Validation Exception", HttpStatus.UNPROCESSABLE_ENTITY), HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
     @ExceptionHandler(AuthorizationException.class)
     public ResponseEntity<Map<String, Object>> handleAuthorizationException(AuthorizationException ex) {
         String error = ex.getMessage();

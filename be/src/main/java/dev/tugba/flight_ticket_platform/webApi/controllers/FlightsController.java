@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.tugba.flight_ticket_platform.business.abstracts.FlightService;
 import dev.tugba.flight_ticket_platform.business.requests.CreateFlightTicket;
+import dev.tugba.flight_ticket_platform.business.requests.RemoveFlightTicket;
 import dev.tugba.flight_ticket_platform.business.requests.SellFlightRequest;
 import dev.tugba.flight_ticket_platform.business.responses.GetAllFlightResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetFilterFlightResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetFlightTicketResponse;
+import dev.tugba.flight_ticket_platform.business.responses.GetRemoveFlightTicket;
 import dev.tugba.flight_ticket_platform.business.responses.GetSellFlightResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetUserFlightResponse;
 import jakarta.validation.Valid;
@@ -55,5 +57,11 @@ public class FlightsController {
     @PreAuthorize("hasAnyAuthority('visitor:read', 'admin:read')")
     public ResponseEntity<GetUserFlightResponse> listUserFlights(@RequestHeader("Authorization") String token, @RequestParam("requestId") String requestId) {
         return ResponseEntity.ok(flightService.listUserFlights(token, requestId));
+    }
+
+    @PostMapping("/flight/remove")
+    @PreAuthorize("hasAuthority('visitor:update') and hasRole('VISITOR')")
+    public ResponseEntity<GetRemoveFlightTicket> removeUserFlight(@RequestHeader("Authorization") String token,  @RequestBody @Valid RemoveFlightTicket removeFlightTicket) {
+        return ResponseEntity.ok(flightService.removeFlightTicket(token, removeFlightTicket));
     }
 }

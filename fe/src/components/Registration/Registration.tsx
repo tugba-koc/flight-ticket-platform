@@ -2,9 +2,15 @@ import React, { useEffect, useState } from 'react';
 import './registration.css';
 import { useRegister } from '../../hooks/useRegister';
 import { Link, useNavigate } from 'react-router';
+import { useValidateEmail } from '../../hooks/useValidateEmail';
+import { useUser } from '../../context/UserContext';
 
 const Registration = () => {
   const navigate = useNavigate();
+
+  const { state, dispatch } = useUser();
+
+  console.log('state', state);
 
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
@@ -17,6 +23,12 @@ const Registration = () => {
     birthDate: '',
     gender: '',
   });
+
+  const {
+    refetch: validateEmail,
+    isError,
+    error: validateEmailError,
+  } = useValidateEmail(formData?.email);
 
   const BUTTON_DISABLED =
     !formData.turkishId ||
@@ -33,6 +45,17 @@ const Registration = () => {
     error: registerError,
   } = useRegister(formData);
 
+  console.log('isError', isError);
+
+  useEffect(() => {
+    if (isError) {
+      dispatch({
+        type: 'SET_FORM_ERROR',
+        payload: { email: validateEmailError?.error },
+      });
+    }
+  }, [dispatch, isError]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -40,7 +63,13 @@ const Registration = () => {
       [name]: value,
     }));
     setError(null);
+    dispatch({
+      type: 'SET_FORM_ERROR',
+      payload: { email: '', tcIdentityNumber: '', phoneNumber: '' },
+    });
   };
+
+  console.log('state', state);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -96,6 +125,7 @@ const Registration = () => {
 
           <div className='input-wrapper'>
             <input
+              onBlur={() => validateEmail()}
               type='email'
               id='email'
               name='email'
@@ -104,6 +134,7 @@ const Registration = () => {
               placeholder='Email'
               required
             />
+            <p>{state?.formError?.email}</p>
           </div>
 
           <div className='input-wrapper'>
