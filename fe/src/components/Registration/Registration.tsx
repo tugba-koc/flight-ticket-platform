@@ -45,16 +45,16 @@ const Registration = () => {
     error: registerError,
   } = useRegister(formData);
 
-  console.log('isError', isError);
+  console.log('validateEmailError', validateEmailError);
 
   useEffect(() => {
-    if (isError) {
+    if (validateEmailError) {
       dispatch({
         type: 'SET_FORM_ERROR',
         payload: { email: validateEmailError?.error },
       });
     }
-  }, [dispatch, isError]);
+  }, [dispatch, validateEmailError]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -68,8 +68,6 @@ const Registration = () => {
       payload: { email: '', tcIdentityNumber: '', phoneNumber: '' },
     });
   };
-
-  console.log('state', state);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -126,6 +124,7 @@ const Registration = () => {
           <div className='input-wrapper'>
             <input
               onBlur={() => validateEmail()}
+              className={state?.formError?.email ? 'error-input' : ''}
               type='email'
               id='email'
               name='email'
@@ -134,7 +133,7 @@ const Registration = () => {
               placeholder='Email'
               required
             />
-            <p>{state?.formError?.email}</p>
+            <p className='error-text'>{state?.formError?.email}</p>
           </div>
 
           <div className='input-wrapper'>

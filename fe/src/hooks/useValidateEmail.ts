@@ -3,7 +3,7 @@ import { fetchValidateEmail } from '../services';
 
 export const useValidateEmail = (email) => {
   const query = useQuery({
-    queryKey: ['validateEmail', email],
+    queryKey: ['validateEmail'],
     queryFn: async () => {
       const result = await fetchValidateEmail(email);
       return result;

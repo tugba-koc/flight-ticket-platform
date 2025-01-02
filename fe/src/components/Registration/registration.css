@@ -91,3 +91,14 @@
   font-size: large;
   font-weight: 900;
 }
+
+.error-text {
+  color: red;
+  font-size: 12px;
+  margin-top: 0px;
+  text-align: left;
+}
+
+.error-input {
+  border-color: red !important;
+}
