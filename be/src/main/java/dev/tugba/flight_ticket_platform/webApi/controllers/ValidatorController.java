@@ -32,4 +32,10 @@ public class ValidatorController {
         public ResponseEntity<GetValidateResponse> validateTurkishId(@RequestParam("requestId") String requestId, @RequestParam("tcId") String tcId) {
                 return ResponseEntity.ok(validatorService.validateTurkishId(requestId, tcId));
         }
+
+        @GetMapping("/validatePhoneNumber")
+        @CrossOrigin(exposedHeaders = {"Access-Control-Allow-Origin","Access-Control-Allow-Credentials"})
+        public ResponseEntity<GetValidateResponse> validatePhoneNumber(@RequestParam("requestId") String requestId, @RequestParam("phoneNumber") String phoneNumber) {
+                return ResponseEntity.ok(validatorService.validatePhoneNumber(requestId, phoneNumber));
+        }
 }

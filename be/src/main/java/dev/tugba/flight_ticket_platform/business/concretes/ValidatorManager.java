@@ -44,5 +44,17 @@ public class ValidatorManager implements ValidatorService {
                 }
         }
 
-        
+        @Override
+        public GetValidateResponse validatePhoneNumber(String requestId, String phoneNumber) {
+                // if phoneNumber does not exist in the database, return 200 status code
+                if(!userRepository.existsByPhoneNumber(phoneNumber)) {
+                        return GetValidateResponse.builder()
+                                        .status(200)
+                                        .datetime(LocalDateTime.now())
+                                        .requestId(requestId)
+                                        .build();
+                } else {
+                        throw new ValidationException("Phone number already exists");
+                }
+        }
 }

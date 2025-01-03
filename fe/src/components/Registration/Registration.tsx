@@ -30,7 +30,10 @@ const Registration = () => {
     !formData.email ||
     !formData.password ||
     !formData.phoneNumber ||
-    !formData.birthDate;
+    !formData.birthDate ||
+    state?.formError?.email ||
+    state?.formError?.turkishId ||
+    state?.formError?.phoneNumber
 
   const {
     data: registerData,
@@ -56,8 +59,6 @@ const Registration = () => {
       });
     }
   }, [dispatch, validateEmailError, validateTurkishIdError]);
-
-  console.log('state', state);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
