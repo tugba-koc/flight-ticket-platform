@@ -20,6 +20,7 @@
 
 .flightCard {
   display: grid;
+  align-items: center;
   grid-auto-flow: column;
   gap: 30px;
   border-radius: 5px;

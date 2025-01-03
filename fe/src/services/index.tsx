@@ -159,6 +159,15 @@ export const fetchValidateEmail = async (email) => {
   return res.data;
 };
 
+export const fetchValidateTurkishId = async (tcId) => {
+  const requestId = uuid4();
+  const url = `${
+    import.meta.env.VITE_BASE_URL
+  }/validator/validateTurkishId?tcId=${tcId}&requestId=${requestId}`;
+  const res = await instanceGet.get(url);
+  return res.data;
+};
+
 export const fetchRemoveFlightTicket = async (flightTicketId) => {
   const url = `${import.meta.env.VITE_BASE_URL}/api/v1/flight/remove`;
   const data = {

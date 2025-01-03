@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.tugba.flight_ticket_platform.business.abstracts.ValidatorService;
-import dev.tugba.flight_ticket_platform.business.responses.GetValidateEmailResponse;
+import dev.tugba.flight_ticket_platform.business.responses.GetValidateResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -23,8 +23,13 @@ public class ValidatorController {
         
         @GetMapping("/validateEmail")
         @CrossOrigin(exposedHeaders = {"Access-Control-Allow-Origin","Access-Control-Allow-Credentials"})
-        public ResponseEntity<GetValidateEmailResponse> validateEmail(@RequestParam("requestId") String requestId, @RequestParam("email") String email) {
+        public ResponseEntity<GetValidateResponse> validateEmail(@RequestParam("requestId") String requestId, @RequestParam("email") String email) {
                 return ResponseEntity.ok(validatorService.validateEmail(requestId, email));
         }
         
+        @GetMapping("/validateTurkishId")
+        @CrossOrigin(exposedHeaders = {"Access-Control-Allow-Origin","Access-Control-Allow-Credentials"})
+        public ResponseEntity<GetValidateResponse> validateTurkishId(@RequestParam("requestId") String requestId, @RequestParam("tcId") String tcId) {
+                return ResponseEntity.ok(validatorService.validateTurkishId(requestId, tcId));
+        }
 }

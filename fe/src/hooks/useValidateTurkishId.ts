@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchValidateEmail } from '../services';
+import { fetchValidateTurkishId } from '../services';
 
-export const useValidateEmail = (email) => {
+export const useValidateTurkishId = (tcId) => {
   const query = useQuery({
-    queryKey: ['validateEmail', email],
+    queryKey: ['validateTurkishId', tcId],
     queryFn: async () => {
-      const result = await fetchValidateEmail(email);
+      const result = await fetchValidateTurkishId(tcId);
       return result;
     },
     enabled: false, // just trigger refetch, not component mount

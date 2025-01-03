@@ -90,7 +90,7 @@ const Login = () => {
           </button>
 
           <div className='registration-link'>
-            <p>You have already signed Up?</p>
+            <p>You didn't sign up yet?</p>
             <span>
               <Link to='/auth/register'>Register</Link>
             </span>

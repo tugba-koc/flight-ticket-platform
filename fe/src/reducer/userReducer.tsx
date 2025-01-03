@@ -3,7 +3,14 @@ export const userInitialState = {
   isModalOpen: false,
   formError: {
     email: '',
-    tcIdentityNumber: '',
+    turkishId: '',
+    phoneNumber: '',
+  },
+  formData: {
+    name: '',
+    surname: '',
+    email: '',
+    turkishId: '',
     phoneNumber: '',
   },
 };
@@ -25,6 +32,14 @@ export const userReducer = (state = userInitialState, action) => {
         ...state,
         formError: {
           ...state.formError,
+          ...action.payload,
+        },
+      };
+    case 'SET_FORM_DATA':
+      return {
+        ...state,
+        formData: {
+          ...state.formData,
           ...action.payload,
         },
       };

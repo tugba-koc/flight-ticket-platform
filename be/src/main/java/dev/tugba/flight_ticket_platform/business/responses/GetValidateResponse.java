@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-public class GetValidateEmailResponse {
+public class GetValidateResponse {
         private int status;
         private LocalDateTime datetime;
         private String requestId;

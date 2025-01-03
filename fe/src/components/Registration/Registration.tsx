@@ -4,13 +4,12 @@ import { useRegister } from '../../hooks/useRegister';
 import { Link, useNavigate } from 'react-router';
 import { useValidateEmail } from '../../hooks/useValidateEmail';
 import { useUser } from '../../context/UserContext';
+import { useValidateTurkishId } from '../../hooks/useValidateTurkishId';
 
 const Registration = () => {
   const navigate = useNavigate();
 
   const { state, dispatch } = useUser();
-
-  console.log('state', state);
 
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
@@ -23,12 +22,6 @@ const Registration = () => {
     birthDate: '',
     gender: '',
   });
-
-  const {
-    refetch: validateEmail,
-    isError,
-    error: validateEmailError,
-  } = useValidateEmail(formData?.email);
 
   const BUTTON_DISABLED =
     !formData.turkishId ||
@@ -44,8 +37,10 @@ const Registration = () => {
     register,
     error: registerError,
   } = useRegister(formData);
-
-  console.log('validateEmailError', validateEmailError);
+  const { refetch: validateEmail, error: validateEmailError } =
+    useValidateEmail(formData?.email);
+  const { refetch: validateTurkishId, error: validateTurkishIdError } =
+    useValidateTurkishId(formData?.turkishId);
 
   useEffect(() => {
     if (validateEmailError) {
@@ -54,7 +49,15 @@ const Registration = () => {
         payload: { email: validateEmailError?.error },
       });
     }
-  }, [dispatch, validateEmailError]);
+    if (validateTurkishIdError) {
+      dispatch({
+        type: 'SET_FORM_ERROR',
+        payload: { turkishId: validateTurkishIdError?.error },
+      });
+    }
+  }, [dispatch, validateEmailError, validateTurkishIdError]);
+
+  console.log('state', state);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,7 +68,7 @@ const Registration = () => {
     setError(null);
     dispatch({
       type: 'SET_FORM_ERROR',
-      payload: { email: '', tcIdentityNumber: '', phoneNumber: '' },
+      payload: { [name]: '' },
     });
   };
 
@@ -76,7 +79,7 @@ const Registration = () => {
 
   useEffect(() => {
     if (registerData) {
-      navigate('/login');
+      navigate('/auth/login');
     }
   }, [navigate, registerData]);
 
@@ -123,7 +126,18 @@ const Registration = () => {
 
           <div className='input-wrapper'>
             <input
-              onBlur={() => validateEmail()}
+              onBlur={() => {
+                if (
+                  formData.email &&
+                  formData.email !== state?.formData?.email
+                ) {
+                  validateEmail();
+                  dispatch({
+                    type: 'SET_FORM_DATA',
+                    payload: { email: formData.email },
+                  });
+                }
+              }}
               className={state?.formError?.email ? 'error-input' : ''}
               type='email'
               id='email'
@@ -138,6 +152,19 @@ const Registration = () => {
 
           <div className='input-wrapper'>
             <input
+              onBlur={() => {
+                if (
+                  formData.turkishId &&
+                  formData.turkishId !== state?.formData?.turkishId &&
+                  formData.turkishId.length === 11
+                ) {
+                  validateTurkishId();
+                  dispatch({
+                    type: 'SET_FORM_DATA',
+                    payload: { turkishId: formData?.turkishId },
+                  });
+                }
+              }}
               type='text'
               id='turkishId'
               name='turkishId'
@@ -147,6 +174,7 @@ const Registration = () => {
               maxLength={11}
               required
             />
+            <p className='error-text'>{state?.formError?.turkishId}</p>
           </div>
 
           <div className='input-wrapper'>
@@ -204,7 +232,7 @@ const Registration = () => {
             Submit
           </button>
           <div className='login-link'>
-            <p>You have already signed Up?</p>
+            <p>You have already signed up?</p>
             <span>
               <Link to='/auth/login'>Login</Link>
             </span>
