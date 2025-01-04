@@ -5,9 +5,13 @@ import { useUserInfo } from '../../hooks/useUserInfo';
 import { useUser } from '../../context/UserContext';
 
 const BalanceEdit = () => {
-  const { data: userInfo } = useUserInfo();
+  const { data: userInfo, refetch } = useUserInfo();
 
   const { dispatch } = useUser();
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   const [balance, setBalance] = useState(100);
   const [newBalance, setNewBalance] = useState('');
@@ -51,7 +55,13 @@ const BalanceEdit = () => {
       setBalance(depositData?.newAmount);
       setNewBalance('');
       setError('');
-      dispatch({ type: 'SET_MODAL', payload: true });
+      dispatch({
+        type: 'SET_MODAL',
+        payload: {
+          view: true,
+          message: 'success',
+        },
+      });
     }
   }, [depositData]);
 

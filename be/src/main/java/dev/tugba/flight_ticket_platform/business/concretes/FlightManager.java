@@ -23,6 +23,7 @@ import dev.tugba.flight_ticket_platform.core.utilities.exceptions.FlightNotFound
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.InvalidCredentialsException;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.SaveToDBException;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.UserNotFoundException;
+import dev.tugba.flight_ticket_platform.core.utilities.exceptions.ValidationException;
 import dev.tugba.flight_ticket_platform.dataAccess.abstracts.FlightRepository;
 import dev.tugba.flight_ticket_platform.dataAccess.abstracts.UserRepository;
 import dev.tugba.flight_ticket_platform.entities.concretes.Flight;
@@ -97,8 +98,7 @@ public class FlightManager implements FlightService {
                         Double userBalance = user.getBalance();
 
                         if (userBalance < flightPrice) {
-                                // TODO: it sould not be a runtime exception, pls change it
-                                throw new RuntimeException("Insufficient balance");
+                                throw new ValidationException("Insufficient balance");
                         } else {
                                 user.setBalance(userBalance - flightPrice);
                         }
@@ -135,8 +135,8 @@ public class FlightManager implements FlightService {
                         throw new SaveToDBException(e.getMessage());
                 } catch (InvalidCredentialsException e) {
                         throw new InvalidCredentialsException(e.getMessage());
-                } catch (RuntimeException e) {
-                        throw new RuntimeException(e.getMessage());
+                } catch (ValidationException e) {
+                        throw new ValidationException(e.getMessage());
                 } catch (Exception e) {
                         throw new RuntimeException("An error occurred while selling the flight");
                 }

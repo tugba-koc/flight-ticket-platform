@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router';
 import { useValidateEmail } from '../../hooks/useValidateEmail';
 import { useUser } from '../../context/UserContext';
 import { useValidateTurkishId } from '../../hooks/useValidateTurkishId';
+import { useValidatePhoneNumber } from '../../hooks/useValidatePhoneNumber';
 
 const Registration = () => {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ const Registration = () => {
     !formData.birthDate ||
     state?.formError?.email ||
     state?.formError?.turkishId ||
-    state?.formError?.phoneNumber
+    state?.formError?.phoneNumber;
 
   const {
     data: registerData,
@@ -44,6 +45,8 @@ const Registration = () => {
     useValidateEmail(formData?.email);
   const { refetch: validateTurkishId, error: validateTurkishIdError } =
     useValidateTurkishId(formData?.turkishId);
+  const { refetch: validatePhoneNumber, error: validatePhoneNumberError } =
+    useValidatePhoneNumber(formData?.phoneNumber);
 
   useEffect(() => {
     if (validateEmailError) {
@@ -58,7 +61,18 @@ const Registration = () => {
         payload: { turkishId: validateTurkishIdError?.error },
       });
     }
-  }, [dispatch, validateEmailError, validateTurkishIdError]);
+    if (validatePhoneNumberError) {
+      dispatch({
+        type: 'SET_FORM_ERROR',
+        payload: { phoneNumber: validatePhoneNumberError?.error },
+      });
+    }
+  }, [
+    dispatch,
+    validateEmailError,
+    validatePhoneNumberError,
+    validateTurkishIdError,
+  ]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -180,6 +194,18 @@ const Registration = () => {
 
           <div className='input-wrapper'>
             <input
+              onBlur={() => {
+                if (
+                  formData.phoneNumber &&
+                  formData.phoneNumber !== state?.formData?.phoneNumber
+                ) {
+                  validatePhoneNumber();
+                  dispatch({
+                    type: 'SET_FORM_DATA',
+                    payload: { phoneNumber: formData.phoneNumber },
+                  });
+                }
+              }}
               type='tel'
               id='phoneNumber'
               name='phoneNumber'
@@ -188,8 +214,8 @@ const Registration = () => {
               placeholder='Phone Number'
               required
             />
+            <p className='error-text'>{state?.formError?.phoneNumber}</p>
           </div>
-
           <div className='input-wrapper'>
             <input
               type='date'

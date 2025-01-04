@@ -1,6 +1,9 @@
 export const userInitialState = {
   role: '',
-  isModalOpen: false,
+  Modal: {
+    isModalOpen: false,
+    message: null,
+  },
   formError: {
     email: '',
     turkishId: '',
@@ -25,7 +28,10 @@ export const userReducer = (state = userInitialState, action) => {
     case 'SET_MODAL':
       return {
         ...state,
-        isModalOpen: action.payload,
+        Modal: {
+          isModalOpen: action.payload.view,
+          message: action.payload.message,
+        },
       };
     case 'SET_FORM_ERROR':
       return {

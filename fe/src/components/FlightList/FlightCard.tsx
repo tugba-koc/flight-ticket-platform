@@ -10,20 +10,37 @@ const FlightList = ({ flight, key }) => {
 
   const { refetch: userInfoFetch } = useUserInfo();
   const { refetch: userFlightListFetch } = useUserFlightList();
-  const { getFlightTicket, isSuccess } = useFlightTicket(
-    flight.id,
-    userInfoFetch,
-    userFlightListFetch
-  );
+  const {
+    getFlightTicket,
+    isSuccess,
+    error: flightTicketError,
+  } = useFlightTicket(flight.id, userInfoFetch, userFlightListFetch);
 
   const purchaseFlightTicket = () => {
     getFlightTicket();
   };
 
   useEffect(() => {
-    console.log('isSuccess', isSuccess);
-    if (isSuccess) dispatch({ type: 'SET_MODAL', payload: isSuccess });
+    if (isSuccess)
+      dispatch({
+        type: 'SET_MODAL',
+        payload: {
+          view: true,
+          message: 'success',
+        },
+      });
   }, [dispatch, isSuccess]);
+
+  useEffect(() => {
+    if (flightTicketError?.error && flightTicketError?.status === 422)
+      dispatch({
+        type: 'SET_MODAL',
+        payload: {
+          view: true,
+          message: flightTicketError?.error,
+        },
+      });
+  }, [dispatch, flightTicketError?.error]);
 
   return (
     <div className='flightCard' key={key}>

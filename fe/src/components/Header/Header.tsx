@@ -6,7 +6,7 @@ import { useLogout } from '../../hooks/useLogout';
 
 const Header = () => {
   const navigate = useNavigate();
-  const { data } = useUserInfo();
+  const { data } = useUserInfo(localStorage.getItem('token') ? true : false);
 
   const { data: logoutData, logout, isSuccess } = useLogout();
 

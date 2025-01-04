@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchFlightAll } from '../services';
 
 export const useFlightAll = () => {
-  const { data, refetch, isLoading, error, isSuccess } = useQuery({
+  const query = useQuery({
     queryKey: ['useFlightAll'],
     queryFn: async () => {
       const result = await fetchFlightAll();
@@ -14,5 +14,11 @@ export const useFlightAll = () => {
     gcTime: 1000 * 60 * 5,
   });
 
-  return { data, refetch, isLoading, error, isSuccess };
+  return {
+    data: query.data,
+    refetch: query.refetch,
+    isLoading: query.isLoading,
+    error: query.error,
+    isSuccess: query.isSuccess,
+  };
 };

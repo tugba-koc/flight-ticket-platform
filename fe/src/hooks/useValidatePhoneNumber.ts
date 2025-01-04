@@ -1,12 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchUserFlightList } from '../services';
+import { fetchValidatePhoneNumber } from '../services';
 
-export const useUserFlightList = () => {
-  // TODO: learn all the options of useQuery
+export const useValidatePhoneNumber = (phoneNumber) => {
   const query = useQuery({
-    queryKey: ['userFlightList'],
+    queryKey: ['validatePhoneNumber', phoneNumber],
     queryFn: async () => {
-      const result = await fetchUserFlightList();
+      const result = await fetchValidatePhoneNumber(phoneNumber);
       return result;
     },
     enabled: false, // just trigger refetch, not component mount
@@ -20,6 +19,7 @@ export const useUserFlightList = () => {
     refetch: query.refetch,
     isLoading: query.isLoading,
     error: query.error,
+    isError: query.isError,
     isSuccess: query.isSuccess,
   };
 };

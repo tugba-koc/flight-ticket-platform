@@ -8,7 +8,7 @@ const Loader = () => {
 
   return isFetching || isMutating ? (
     <div className='loader-overlay'>
-      <span class='loader'></span>{' '}
+      <span className='loader'></span>{' '}
     </div>
   ) : null;
 };

@@ -32,7 +32,13 @@ const PasswordChange = () => {
     if (resetPasswordData && isSuccess) {
       setConfirmPassword('');
       setPassword('');
-      dispatch({ type: 'SET_MODAL', payload: true });
+      dispatch({
+        type: 'SET_MODAL',
+        payload: {
+          view: true,
+          message: 'success',
+        },
+      });
     }
   }, [resetPasswordData]);
 

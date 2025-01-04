@@ -77,6 +77,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/api/v1/flights/search").permitAll()
                 .requestMatchers("/validator/validateEmail").permitAll()
                 .requestMatchers("/validator/validateTurkishId").permitAll()
+                .requestMatchers("/validator/validatePhoneNumber").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session

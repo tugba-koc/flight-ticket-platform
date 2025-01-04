@@ -12,7 +12,6 @@ import dev.tugba.flight_ticket_platform.business.responses.GetValidateResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
 @RestController
 @RequestMapping("/validator")
 @AllArgsConstructor
