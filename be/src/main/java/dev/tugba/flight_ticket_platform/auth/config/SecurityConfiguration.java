@@ -38,10 +38,7 @@ public class SecurityConfiguration {
     @Autowired
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserService userService;
-
-    @Autowired
-    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomLogoutHandler logoutHandler;
 
     @Bean

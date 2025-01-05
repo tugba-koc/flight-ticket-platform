@@ -4,12 +4,12 @@ import { fetchUserFlightList } from '../services';
 export const useUserFlightList = () => {
   // TODO: learn all the options of useQuery
   const query = useQuery({
-    queryKey: ['userFlightList'],
+    queryKey: ['userFlightList', localStorage.getItem('token')],
     queryFn: async () => {
       const result = await fetchUserFlightList();
       return result;
     },
-    enabled: false, // just trigger refetch, not component mount
+    enabled: !!localStorage.getItem('token'),
     retry: false,
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 5,

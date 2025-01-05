@@ -247,17 +247,19 @@ public class FlightManager implements FlightService {
 
                         List<String> flightTicketIds = user.getFlightTicketIds();
                         if (flightTicketIds == null) {
-                                throw new RuntimeException("Flight not found");
+                                throw new FlightNotFoundException("Flight not found");
                         }
 
                         if (flightTicketIds.contains(removeFlightTicket.getFlightTicketId())) {
                                 flightTicketIds.remove(removeFlightTicket.getFlightTicketId());
                                 user.setFlightTicketIds(flightTicketIds);
                         } else {
-                                throw new RuntimeException("Flight not found");
+                                throw new FlightNotFoundException("Flight not found");
                         }
 
                         try {
+                                Flight flight = flightRepository.findById(removeFlightTicket.getFlightTicketId()).orElseThrow(() -> new FlightNotFoundException("Flight not found"));
+                                user.setBalance(user.getBalance() + flight.getPrice());
                                 userRepository.save(user);
                         } catch (SaveToDBException e) {
                                 throw new SaveToDBException("An error occurred while saving to the database");
@@ -270,6 +272,10 @@ public class FlightManager implements FlightService {
                                 .build();
                 } catch (UserNotFoundException e) {
                         throw new UserNotFoundException(e.getMessage());
+                } catch (FlightNotFoundException e) {
+                        throw new FlightNotFoundException(e.getMessage());
+                } catch (SaveToDBException e) {
+                        throw new SaveToDBException(e.getMessage());
                 } catch (RuntimeException e) {
                         throw new RuntimeException(e.getMessage());
                 } catch (Exception e) {

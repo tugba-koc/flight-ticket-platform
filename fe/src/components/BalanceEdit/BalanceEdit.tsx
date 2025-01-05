@@ -5,13 +5,9 @@ import { useUserInfo } from '../../hooks/useUserInfo';
 import { useUser } from '../../context/UserContext';
 
 const BalanceEdit = () => {
-  const { data: userInfo, refetch } = useUserInfo();
+  const { data: userInfo } = useUserInfo();
 
   const { dispatch } = useUser();
-
-  useEffect(() => {
-    refetch();
-  }, []);
 
   const [balance, setBalance] = useState(100);
   const [newBalance, setNewBalance] = useState('');
