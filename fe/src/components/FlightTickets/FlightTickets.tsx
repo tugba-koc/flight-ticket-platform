@@ -3,7 +3,6 @@ import { useUserFlightList } from '../../hooks/useUserFlightList';
 import './flightTickets.css';
 import { useRemoveFlightTicket } from '../../hooks/useRemoveFlightTicket';
 import NoFlight from '../NoFlight/NoFlight';
-import { Link } from 'react-router';
 
 const FlightTicketCard = ({ ticket }) => {
   console.log('ticket', ticket);
@@ -38,8 +37,7 @@ const FlightTicketCard = ({ ticket }) => {
 };
 
 const FlightTickets = () => {
-  const { data: tickets, isSuccess } = useUserFlightList();
-  console.log('tickets ==> ', tickets);
+  const { data: tickets } = useUserFlightList();
 
   return (
     <div>

@@ -101,7 +101,7 @@ public class AuthenticateManager implements AuthenticateService {
                 String token;
                 try {
                     token = jwtService.generateToken(user);
-                } catch (Exception e) {
+                } catch (TokenCreationException e) {
                     throw new TokenCreationException("Failed to generate token");
                 }
         
