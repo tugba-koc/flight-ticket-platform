@@ -31,12 +31,14 @@ const Header = () => {
 
   return (
     <div className='header-container'>
-      <img
-        width={70}
-        height={'auto'}
-        src='https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-original-577x577/s3/032014/untitled-1_70.png?itok=yv_awhaU'
-        alt=''
-      />
+      <Link to='/'>
+        <img
+          width={70}
+          height={'auto'}
+          src='https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-original-577x577/s3/032014/untitled-1_70.png?itok=yv_awhaU'
+          alt=''
+        />
+      </Link>
 
       <div className='right-side'>
         {localStorage.getItem('token') ? (

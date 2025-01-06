@@ -12,6 +12,7 @@ import AddFlight from './layouts/AddFlight/AddFlight';
 import Footer from './components/Footer/Footer';
 import Loader from './components/Loader/Loader';
 import Modal from './components/Modal/Modal';
+import FilteredFlightList from './components/FilteredFlightList/FilteredFlightList';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         </Route>
 
         <Route path='/' element={<Flights />} />
+        <Route path='/flights' element={<FilteredFlightList />} />
 
         <Route path='/portal' element={<Portal />}>
           <Route index element={<PasswordChange />} />

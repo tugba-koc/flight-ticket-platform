@@ -16,6 +16,7 @@ export const userInitialState = {
     turkishId: '',
     phoneNumber: '',
   },
+  filterData: [],
 };
 
 export const userReducer = (state = userInitialState, action) => {
@@ -48,6 +49,11 @@ export const userReducer = (state = userInitialState, action) => {
           ...state.formData,
           ...action.payload,
         },
+      };
+    case 'SET_FILTER_DATA':
+      return {
+        ...state,
+        filterData: action.payload,
       };
     default:
       return state;

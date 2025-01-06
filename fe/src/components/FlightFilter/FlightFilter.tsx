@@ -1,36 +1,23 @@
 import React from 'react';
 import './flightFilter.css';
-import { useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router';
 
 const cities = ['İstanbul', 'Ankara', 'İzmir', 'Erzurum', 'Trabzon'];
 
-const FlightFilter = ({ setFilters, filters, refetch }) => {
-  const queryClient = useQueryClient();
+const FlightFilter = ({ setFilters, filters }) => {
+  const navigate = useNavigate();
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters({ ...filters, [name]: value });
   };
 
-  // It is a good practice to use queryKey to cache the data.
-  const queryKey = [
-    'filterFlight',
-    filters.departureCity,
-    filters.arrivalCity,
-    filters.date,
-  ];
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const cachedData = queryClient.getQueryData(queryKey);
-
-    if (cachedData) {
-      console.log('there is cached data for this key', cachedData);
-      return;
-    }
-
-    refetch();
+    navigate(
+      `/flights?departureCity=${filters.departureCity}&arrivalCity=${filters.arrivalCity}&date=${filters.date}`
+    );
   };
 
   return (

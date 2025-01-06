@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Header from '../../components/Header/Header';
-import { useFlightAll } from '../../hooks/useFlightAll';
 import './flights.css';
-import FlightList from '../../components/FlightList/FlightCard';
 import FlightFilter from '../../components/FlightFilter/FlightFilter';
-import { useFilterFlight } from '../../hooks/useFilterFlight';
-import NoFlight from '../../components/NoFlight/NoFlight';
+import ImagesRow from '../../components/ImagesRow/ImagesRow';
 
 const Flights = () => {
   const [filters, setFilters] = useState({
@@ -14,22 +11,6 @@ const Flights = () => {
     date: '',
     maxPrice: '',
   });
-
-  const [filterFlightData, setfilterFlightData] = useState([]);
-
-  const { data: allFlightData, isSuccess } = useFlightAll();
-
-  const { refetch: callFilterFlight, data: filterFlight } = useFilterFlight({
-    departureCity: filters.departureCity,
-    arrivalCity: filters.arrivalCity,
-    departureDay: filters.date,
-  });
-
-  useEffect(() => {
-    if (filterFlight) {
-      setfilterFlightData(filterFlight);
-    }
-  }, [filterFlight]);
 
   return (
     <>
@@ -43,29 +24,10 @@ const Flights = () => {
       />
       <div id='flights-main'>
         <aside>
-          <FlightFilter
-            filters={filters}
-            setFilters={setFilters}
-            refetch={callFilterFlight}
-          />
+          <FlightFilter filters={filters} setFilters={setFilters} />
         </aside>
-        {isSuccess && (filterFlight || allFlightData) && (
-          <div className='flights'>
-            {filterFlightData?.filterFlightDataList?.length > 0 ? (
-              filterFlightData?.filterFlightDataList.map((flight) => (
-                <FlightList flight={flight} key={flight.id} />
-              ))
-            ) : filterFlightData?.filterFlightDataList?.length === 0 ? (
-              <NoFlight />
-            ) : (
-              isSuccess &&
-              allFlightData?.flightDataList.map((flight) => (
-                <FlightList flight={flight} key={flight.id} />
-              ))
-            )}
-          </div>
-        )}
       </div>
+      <ImagesRow />
     </>
   );
 };

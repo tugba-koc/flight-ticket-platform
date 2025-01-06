@@ -5,7 +5,7 @@ import { useUserInfo } from '../../hooks/useUserInfo';
 import { useUser } from '../../context/UserContext';
 
 const BalanceEdit = () => {
-  const { data: userInfo } = useUserInfo();
+  const { data: userInfo, refetch: userInfoFetch } = useUserInfo();
 
   const { dispatch } = useUser();
 
@@ -17,7 +17,7 @@ const BalanceEdit = () => {
     data: depositData,
     deposit,
     error: errorDeposit,
-  } = useDeposit(newBalance);
+  } = useDeposit(newBalance, userInfoFetch);
 
   const handleInputChange = (e) => {
     const value = e.target.value;

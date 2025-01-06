@@ -2,6 +2,8 @@ import React from 'react';
 import { useUserFlightList } from '../../hooks/useUserFlightList';
 import './flightTickets.css';
 import { useRemoveFlightTicket } from '../../hooks/useRemoveFlightTicket';
+import NoFlight from '../NoFlight/NoFlight';
+import { Link } from 'react-router';
 
 const FlightTicketCard = ({ ticket }) => {
   console.log('ticket', ticket);
@@ -37,16 +39,19 @@ const FlightTicketCard = ({ ticket }) => {
 
 const FlightTickets = () => {
   const { data: tickets, isSuccess } = useUserFlightList();
+  console.log('tickets ==> ', tickets);
 
   return (
     <div>
       <h2>My Flight Tickets</h2>
       <ul className='flightTickets-list'>
-        {isSuccess &&
-          tickets &&
+        {tickets && tickets?.flights.length > 0 ? (
           tickets?.flights.map((ticket) => (
             <FlightTicketCard ticket={ticket} key={ticket.id} />
-          ))}
+          ))
+        ) : (
+          <NoFlight />
+        )}
       </ul>
     </div>
   );
