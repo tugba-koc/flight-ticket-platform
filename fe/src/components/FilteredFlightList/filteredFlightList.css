@@ -1,0 +1,58 @@
+.hero-image {
+  background-color: #44a4f3;
+  height: 220px;
+  width: 100%;
+}
+
+.filteredFlightList-container {
+  width: 80%;
+  margin: auto;
+  padding: 14px;
+  background-color: #f3f6f8;
+}
+
+.filteredFlightList {
+  margin-top: -120px; /* Adjust this value to pull the element upwards */
+}
+
+.filteredFlightList-text {
+  font-size: 24px;
+  font-weight: 800;
+  text-align: center;
+  padding-top: 80px;
+  background-color: rgb(255, 255, 255);
+  margin: 0 auto 14px;
+  padding: 30px;
+  display: flex;
+  align-items: flex-start;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+
+  div {
+    display: flex;
+
+    p {
+      margin: 0;
+      padding: 0;
+      font-size: 16px;
+      font-weight: 400;
+      margin: 0 16px;
+    }
+  }
+
+  h4 {
+    font-size: 20px;
+    margin: 30px 16px;
+  }
+}
+
+.filteredFlightList-header {
+  position: relative;
+  width: 80%;
+  top: -130px;
+  margin: auto;
+  text-align: left;
+  color: white;
+  font-size: 24px;
+}

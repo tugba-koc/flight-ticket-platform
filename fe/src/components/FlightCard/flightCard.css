@@ -21,7 +21,8 @@
 .flightCard {
   display: grid;
   align-items: center;
-  grid-auto-flow: column;
+  grid-template-columns: 0.5fr 1fr 1fr 1fr 2fr;
+  justify-items: start;
   gap: 30px;
   border-radius: 5px;
   padding: 10px;

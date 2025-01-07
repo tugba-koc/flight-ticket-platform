@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, NavLink, useNavigate } from 'react-router';
 import './header.css';
 import { useUserInfo } from '../../hooks/useUserInfo';
 import { useLogout } from '../../hooks/useLogout';

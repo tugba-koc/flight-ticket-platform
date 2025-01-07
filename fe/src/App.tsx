@@ -5,7 +5,7 @@ import Registration from './components/Registration/Registration';
 import Login from './components/Login/Login';
 import Flights from './layouts/Flights/Flights';
 import Portal from './layouts/Portal/Portal';
-import PasswordChange from './components/PasswordChange/PasswordChange';
+import PasswordChange from './components/ChangePassword/ChangePassword';
 import BalanceEdit from './components/BalanceEdit/BalanceEdit';
 import FlightTickets from './components/FlightTickets/FlightTickets';
 import AddFlight from './layouts/AddFlight/AddFlight';
@@ -30,7 +30,7 @@ function App() {
 
         <Route path='/portal' element={<Portal />}>
           <Route index element={<PasswordChange />} />
-          <Route path='password-change' element={<PasswordChange />} />
+          <Route path='profile' element={<PasswordChange />} />
           <Route path='balance-edit' element={<BalanceEdit />} />
           <Route path='flight-tickets' element={<FlightTickets />} />
         </Route>

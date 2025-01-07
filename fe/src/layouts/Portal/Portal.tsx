@@ -18,7 +18,7 @@ const Portal = () => {
 
         <div className='right-side'>
           <button className='logout-button'>
-            <NavLink to='password-change'>Change Password</NavLink>
+            <NavLink to='profile'>Profile</NavLink>
           </button>
           <button className='myportal-button'>
             <NavLink to='balance-edit'>Deposit</NavLink>

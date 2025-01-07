@@ -1,11 +1,10 @@
 import React from 'react';
-import { useUser } from '../../context/UserContext';
-import FlightList from '../FlightCard/FlightCard';
+import FlightCard from '../FlightCard/FlightCard';
 import NoFlight from '../NoFlight/NoFlight';
 import Header from '../Header/Header';
 import { useFilterFlight } from '../../hooks/useFilterFlight';
 import { useSearchParams } from 'react-router';
-import ImagesRow from '../ImagesRow/ImagesRow';
+import './filteredFlightList.css';
 
 const FilteredFlightList = () => {
   const [searchParams] = useSearchParams();
@@ -29,18 +28,48 @@ const FilteredFlightList = () => {
   return (
     <>
       <Header />
-      <div className='flights'>
-        {filterData?.filterFlightDataList?.length > 0 ? (
-          filterData?.filterFlightDataList.map((flight) => (
-            <FlightList flight={flight} key={flight.id} />
-          ))
-        ) : filterData?.filterFlightDataList?.length === 0 ? (
-          <NoFlight />
-        ) : (
-          filterData?.flightDataList.map((flight) => (
-            <FlightList flight={flight} key={flight.id} />
-          ))
-        )}
+      <div className='hero-image'></div>
+      <h3 className='filteredFlightList-header'>Choose your flights</h3>
+      <div className='filteredFlightList-container'>
+        <div className='filteredFlightList'>
+          <div className='filteredFlightList-text'>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <h4>{departureCity}</h4>
+              <span>
+                <img
+                  className='switch-icon'
+                  width={'30px'}
+                  src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSi09vu7pWKVz3FpTlaljOcKknKDwEnruZsrA&s'
+                  alt='switch icon'
+                />
+              </span>
+              <h4>{arrivalCity}</h4>
+            </div>
+            <div>
+              <p>When {date} </p>
+            </div>
+          </div>
+        </div>
+
+        <div className='flights'>
+          {filterData?.filterFlightDataList?.length > 0 ? (
+            filterData?.filterFlightDataList.map((flight) => (
+              <FlightCard flight={flight} key={flight.id} />
+            ))
+          ) : filterData?.filterFlightDataList?.length === 0 ? (
+            <NoFlight />
+          ) : (
+            filterData?.flightDataList.map((flight) => (
+              <FlightCard flight={flight} key={flight.id} />
+            ))
+          )}
+        </div>
       </div>
     </>
   );

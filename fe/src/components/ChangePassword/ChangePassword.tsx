@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useResetPassword } from '../../hooks/useResetPassword';
-import './passwordChange.css';
+import './changePassword.css';
 import { useUser } from '../../context/UserContext';
 
-const PasswordChange = () => {
+const ChangePassword = () => {
   const { dispatch } = useUser();
 
   const [password, setPassword] = useState('');
@@ -82,4 +82,4 @@ const PasswordChange = () => {
   );
 };
 
-export default PasswordChange;
+export default ChangePassword;
