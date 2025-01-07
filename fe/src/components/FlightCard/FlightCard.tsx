@@ -21,7 +21,8 @@ const FlightCard = ({ flight, key }) => {
   };
 
   useEffect(() => {
-    if (isSuccess)
+    if (isSuccess) {
+      console.log('düştü');
       dispatch({
         type: 'SET_MODAL',
         payload: {
@@ -29,6 +30,7 @@ const FlightCard = ({ flight, key }) => {
           message: 'success',
         },
       });
+    }
   }, [dispatch, isSuccess]);
 
   useEffect(() => {
@@ -57,7 +59,17 @@ const FlightCard = ({ flight, key }) => {
         <p className='flightCard-price'>{flight?.price}$</p>
         <button
           className='purchase-button'
-          onClick={() => purchaseFlightTicket(flight.id)}
+          onClick={() => {
+            localStorage.getItem('token')
+              ? purchaseFlightTicket(flight.id)
+              : dispatch({
+                  type: 'SET_MODAL',
+                  payload: {
+                    view: true,
+                    message: 'Please login to purchase',
+                  },
+                });
+          }}
         >
           Purchase
         </button>

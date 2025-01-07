@@ -1,6 +1,7 @@
 import React from 'react';
 import './modal.css';
 import { useUser } from '../../context/UserContext';
+import { Link } from 'react-router';
 
 const Modal = () => {
   const {
@@ -20,6 +21,9 @@ const Modal = () => {
     });
   };
 
+  console.log('isModalOpen', isModalOpen);
+  console.log('message', message);
+
   if (!isModalOpen) return null;
   return (
     <div id='myModal' className='modal'>
@@ -37,6 +41,11 @@ const Modal = () => {
             <h4>Success!</h4>
             <p>Your operation has been successfully completed.</p>
           </>
+        )}
+        {message === 'Please login to purchase' && (
+          <Link onClick={handleCloseModal} to='auth/login'>
+            Login
+          </Link>
         )}
       </div>
     </div>
