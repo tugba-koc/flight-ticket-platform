@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 import dev.tugba.flight_ticket_platform.auth.config.abstracts.JwtService;
 import dev.tugba.flight_ticket_platform.auth.config.constants.Role;
 import dev.tugba.flight_ticket_platform.business.abstracts.AuthenticateService;
+import dev.tugba.flight_ticket_platform.business.requests.CreateForgotPasswordRequest;
 import dev.tugba.flight_ticket_platform.business.requests.CreateRegisterRequest;
 import dev.tugba.flight_ticket_platform.business.requests.LoginRequest;
 import dev.tugba.flight_ticket_platform.business.requests.UpdatePassword;
+import dev.tugba.flight_ticket_platform.business.responses.GetForgotPasswordCheckResponse;
 import dev.tugba.flight_ticket_platform.business.responses.GetResetPasswordResponse;
 import dev.tugba.flight_ticket_platform.business.responses.LoginResponse;
 import dev.tugba.flight_ticket_platform.core.utilities.exceptions.AlreadyExistsUserException;
@@ -55,6 +57,7 @@ public class AuthenticateManager implements AuthenticateService {
                                         .surname(createRegisterRequest.getSurname())
                                         .phoneNumber(createRegisterRequest.getPhoneNumber())
                                         .role(Role.VISITOR)
+                                        .birthDate(createRegisterRequest.getBirthDate())
                                         .gender(createRegisterRequest.getGender())
                                         .createdAt(java.time.LocalDateTime.now())
                                         .updatedAt(java.time.LocalDateTime.now())
@@ -177,6 +180,32 @@ public class AuthenticateManager implements AuthenticateService {
                         throw new SaveToDBException(e.getMessage());
                 } catch (Exception e) {
                         throw new RuntimeException("An unexpected error occurred");
+                }
+        }
+
+        @Override
+        public GetForgotPasswordCheckResponse forgotPasswordCheck(
+                        CreateForgotPasswordRequest createForgotPasswordRequest) {
+                try {
+                        User user = userRepository.findByEmail(createForgotPasswordRequest.getEmail()).orElseThrow(() -> new UserNotFoundException("User not found"));
+                        if (!user.getPhoneNumber().equals(createForgotPasswordRequest.getPhoneNumber())) {
+                                throw new InvalidCredentialsException("Phone number does not match");
+                        }
+                        if (!user.getBirthDate().equals(createForgotPasswordRequest.getBirthDate())) {
+                                throw new InvalidCredentialsException("Birthdate does not match");
+                        }
+                        return GetForgotPasswordCheckResponse.builder()
+                                .status(200)
+                                .requestId(createForgotPasswordRequest.getRequestId())
+                                .datetime(LocalDateTime.now())
+                                .build();
+
+                } catch (UserNotFoundException e) {
+                        throw new UserNotFoundException("User not found");
+                } catch (InvalidCredentialsException e) {
+                        throw new InvalidCredentialsException(e.getMessage());
+                } catch (Exception e) {
+                        throw new RuntimeException("An unexpected error occurred", e);
                 }
         }
 }

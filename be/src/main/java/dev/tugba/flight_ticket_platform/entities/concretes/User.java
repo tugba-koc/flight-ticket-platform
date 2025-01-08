@@ -1,5 +1,6 @@
 package dev.tugba.flight_ticket_platform.entities.concretes;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -54,6 +55,9 @@ public class User implements UserDetails {
 
     @Field("updatedAt")
     private LocalDateTime updatedAt;
+
+    @Field("birthDate")
+    private LocalDate birthDate;
 
     @Field("balance")
     private Double balance;

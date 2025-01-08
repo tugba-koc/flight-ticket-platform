@@ -1,23 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import './login.css';
+import './forgotPassword.css';
 import { Link, useNavigate } from 'react-router';
-import { useLogin } from '../../hooks/useLogin';
 import { useUser } from '../../context/UserContext';
+import { useForgotPasswordCheck } from '../../hooks/useForgotPasswordCheck';
 
-const Login = () => {
+const ForgotPassword = () => {
   const navigate = useNavigate();
   const { dispatch } = useUser();
 
   const [formData, setFormData] = useState({
     email: '',
-    password: '',
+    phoneNumber: '',
+    birthDate: '',
   });
 
   const [error, setError] = useState(null);
 
-  const BUTTON_DISABLED = !formData.email || !formData.password;
+  const BUTTON_DISABLED =
+    error || !formData.email || !formData.phoneNumber || !formData.birthDate;
 
-  const { data: loginData, login, error: errorLogin } = useLogin(formData);
+  const {
+    data: forgotPasswordCheckData,
+    forgotPasswordCheck,
+    error: errorForgotPasswordCheck,
+  } = useForgotPasswordCheck(formData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,22 +36,22 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login();
+    forgotPasswordCheck();
   };
 
-  useEffect(() => {
+  /*   useEffect(() => {
     if (loginData?.token !== null && loginData?.token !== undefined) {
       localStorage.setItem('token', loginData.token);
       dispatch({ type: 'SET_ROLE', payload: loginData.role });
       navigate('/');
     }
-  }, [navigate, loginData, dispatch]);
+  }, [navigate, loginData, dispatch]); */
 
   useEffect(() => {
-    if (errorLogin) {
-      setError(errorLogin);
+    if (errorForgotPasswordCheck) {
+      setError(errorForgotPasswordCheck);
     }
-  }, [errorLogin]);
+  }, [errorForgotPasswordCheck]);
 
   return (
     <>
@@ -58,7 +64,7 @@ const Login = () => {
         />
 
         <form id='login' onSubmit={handleSubmit}>
-          <h2>Login</h2>
+          <h2>Forget Password</h2>
           <div className='input-wrapper'>
             <input
               className={error ? 'error' : ''}
@@ -71,16 +77,26 @@ const Login = () => {
               required
             />
           </div>
+          <div className='input-wrapper'>
+            <input
+              type='tel'
+              id='phoneNumber'
+              name='phoneNumber'
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              placeholder='Phone Number'
+              required
+            />
+          </div>
 
           <div className='input-wrapper'>
             <input
-              className={error ? 'error' : ''}
-              type='password'
-              id='password'
-              name='password'
-              value={formData.password}
+              type='date'
+              id='birthDate'
+              name='birthDate'
+              value={formData.birthDate}
+              placeholder='Birth Date'
               onChange={handleChange}
-              placeholder='Password'
               required
             />
           </div>
@@ -88,23 +104,10 @@ const Login = () => {
           <button disabled={BUTTON_DISABLED} type='submit'>
             Submit
           </button>
-
-          <div className='registration-link'>
-            <span>
-              <Link to='/auth/forgot-password'>Forgot Password</Link>
-            </span>
-          </div>
-
-          <div className='registration-link'>
-            <p>You didn't sign up yet?</p>
-            <span>
-              <Link to='/auth/register'>Register</Link>
-            </span>
-          </div>
         </form>
       </div>
     </>
   );
 };
 
-export default Login;
+export default ForgotPassword;

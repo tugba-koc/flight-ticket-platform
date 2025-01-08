@@ -1,5 +1,7 @@
 package dev.tugba.flight_ticket_platform.business.requests;
 
+import java.time.LocalDate;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -35,8 +37,7 @@ public class CreateRegisterRequest {
         private String phoneNumber;
 
         @NotNull(message = "birthDate cannot be null")
-        @NotEmpty(message = "birthDate cannot be empty")
-        private String birthDate;
+        private LocalDate birthDate;
 
         @NotNull(message = "gender cannot be null")
         @NotEmpty(message = "gender cannot be empty")

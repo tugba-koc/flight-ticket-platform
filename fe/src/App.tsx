@@ -13,6 +13,7 @@ import Footer from './components/Footer/Footer';
 import Loader from './components/Loader/Loader';
 import Modal from './components/Modal/Modal';
 import FilteredFlightList from './components/FilteredFlightList/FilteredFlightList';
+import ForgotPassword from './components/ForgotPassword/ForgotPassword';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path='/auth' element={<AuthLayout />}>
           <Route path='register' element={<Registration />} />
           <Route path='login' element={<Login />} />
+          <Route path='forgot-password' element={<ForgotPassword />} />
         </Route>
 
         <Route path='/' element={<Flights />} />
