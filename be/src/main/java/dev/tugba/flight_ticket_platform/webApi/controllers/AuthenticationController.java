@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.tugba.flight_ticket_platform.business.abstracts.AuthenticateService;
 import dev.tugba.flight_ticket_platform.business.requests.CreateForgotPasswordRequest;
+import dev.tugba.flight_ticket_platform.business.requests.CreateForgotPasswordUpdateRequest;
 import dev.tugba.flight_ticket_platform.business.requests.CreateRegisterRequest;
 import dev.tugba.flight_ticket_platform.business.requests.LoginRequest;
 import dev.tugba.flight_ticket_platform.business.requests.UpdatePassword;
@@ -53,5 +54,11 @@ public class AuthenticationController {
     @CrossOrigin(exposedHeaders = {"Access-Control-Allow-Origin","Access-Control-Allow-Credentials"})
     public ResponseEntity<GetForgotPasswordCheckResponse> forgotPasswordCheck(@RequestBody @Valid CreateForgotPasswordRequest createForgotPasswordRequest) {
         return ResponseEntity.ok(authenticateService.forgotPasswordCheck(createForgotPasswordRequest));
+    }
+
+    @PostMapping("/forgot-password/update")
+    @CrossOrigin(exposedHeaders = {"Access-Control-Allow-Origin","Access-Control-Allow-Credentials"})
+    public ResponseEntity<GetForgotPasswordCheckResponse> forgotPasswordUpdate(@RequestBody @Valid CreateForgotPasswordUpdateRequest createForgotPasswordUpdateRequest) {
+        return ResponseEntity.ok(authenticateService.forgotPasswordUpdate(createForgotPasswordUpdateRequest));
     }
 }

@@ -11,6 +11,7 @@ import dev.tugba.flight_ticket_platform.auth.config.abstracts.JwtService;
 import dev.tugba.flight_ticket_platform.auth.config.constants.Role;
 import dev.tugba.flight_ticket_platform.business.abstracts.AuthenticateService;
 import dev.tugba.flight_ticket_platform.business.requests.CreateForgotPasswordRequest;
+import dev.tugba.flight_ticket_platform.business.requests.CreateForgotPasswordUpdateRequest;
 import dev.tugba.flight_ticket_platform.business.requests.CreateRegisterRequest;
 import dev.tugba.flight_ticket_platform.business.requests.LoginRequest;
 import dev.tugba.flight_ticket_platform.business.requests.UpdatePassword;
@@ -206,6 +207,20 @@ public class AuthenticateManager implements AuthenticateService {
                         throw new InvalidCredentialsException(e.getMessage());
                 } catch (Exception e) {
                         throw new RuntimeException("An unexpected error occurred", e);
+                }
+        }
+
+        @Override
+        public GetForgotPasswordCheckResponse forgotPasswordUpdate(
+                        CreateForgotPasswordUpdateRequest createForgotPasswordUpdateRequest) {
+                try {
+                        if(createForgotPasswordUpdateRequest.getNewPassword() != createForgotPasswordUpdateRequest.getConfirmPassword()) {
+                                throw new InvalidCredentialsException("Passwords do not match");
+                        }
+
+                        
+                } catch (Exception e) {
+                        // TODO: handle exception
                 }
         }
 }
