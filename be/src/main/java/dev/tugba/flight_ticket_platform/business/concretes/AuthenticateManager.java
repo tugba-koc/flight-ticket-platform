@@ -218,9 +218,29 @@ public class AuthenticateManager implements AuthenticateService {
                                 throw new InvalidCredentialsException("Passwords do not match");
                         }
 
+                        User user = userRepository.findByEmail(createForgotPasswordUpdateRequest.getEmail()).orElseThrow(()-> new UserNotFoundException("User not found"));
+
+                        if(!user.getPhoneNumber().equals(createForgotPasswordUpdateRequest.getPhoneNumber())) {
+                                throw new InvalidCredentialsException("Phone number does not match");
+                        }
+                        if(!user.getTurkishId().equals(createForgotPasswordUpdateRequest.getTurkishId())) {
+                                throw new InvalidCredentialsException("Turkish ID does not match");
+                        }
+                        user.setPassword(passwordEncoder.encode(createForgotPasswordUpdateRequest.getNewPassword()));
+                        user.setUpdatedAt(LocalDateTime.now());
+
+                        return GetForgotPasswordCheckResponse.builder()
+                                .status(200)
+                                .requestId(createForgotPasswordUpdateRequest.getRequestId())
+                                .datetime(LocalDateTime.now())
+                                .build();
                         
+                } catch (UserNotFoundException e) {
+                        throw new UserNotFoundException(e.getMessage());
+                } catch (InvalidCredentialsException e) {
+                        throw new InvalidCredentialsException(e.getMessage());
                 } catch (Exception e) {
-                        // TODO: handle exception
+                        throw new RuntimeException("An unexpected error occurred", e);
                 }
         }
 }
