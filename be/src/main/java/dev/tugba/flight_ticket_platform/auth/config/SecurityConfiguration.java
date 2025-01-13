@@ -67,6 +67,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/api/v1/flight/remove").hasRole(Role.VISITOR.name())
                 .requestMatchers("/api/v1/user").hasRole(Role.VISITOR.name())
                 .requestMatchers("/api/v1/auth/forgot-password/check").permitAll()
+                .requestMatchers("/api/v1/auth/forgot-password/update").permitAll()
                 .requestMatchers("/api/v1/auth/login").permitAll()
                 .requestMatchers("/api/v1/auth/register").permitAll()
                 .requestMatchers("/api/v1/auth/reset-password").permitAll()
