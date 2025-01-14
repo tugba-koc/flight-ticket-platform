@@ -19,11 +19,8 @@ const ForgotPassword = () => {
   const BUTTON_DISABLED =
     error || !formData.email || !formData.phoneNumber || !formData.birthDate;
 
-  const {
-    data: forgotPasswordCheckData,
-    forgotPasswordCheck,
-    error: errorForgotPasswordCheck,
-  } = useForgotPasswordCheck(formData);
+  const { forgotPasswordCheck, error: errorForgotPasswordCheck } =
+    useForgotPasswordCheck(formData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,14 +35,6 @@ const ForgotPassword = () => {
     e.preventDefault();
     forgotPasswordCheck();
   };
-
-  /*   useEffect(() => {
-    if (loginData?.token !== null && loginData?.token !== undefined) {
-      localStorage.setItem('token', loginData.token);
-      dispatch({ type: 'SET_ROLE', payload: loginData.role });
-      navigate('/');
-    }
-  }, [navigate, loginData, dispatch]); */
 
   useEffect(() => {
     if (errorForgotPasswordCheck) {

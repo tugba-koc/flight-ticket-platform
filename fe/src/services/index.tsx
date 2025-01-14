@@ -213,3 +213,29 @@ export const fetchForgotPasswordCheck = async (
   const res = await instancePost.post(url, data, {});
   return res.data;
 };
+
+export const fetchForgotPasswordUpdate = async (
+  email,
+  phoneNumber,
+  birthDate,
+  newPassword,
+  confirmPassword,
+  turkishId
+) => {
+  const url = `${
+    import.meta.env.VITE_BASE_URL
+  }/api/v1/auth/forgot-password/update`;
+
+  const data = {
+    email,
+    phoneNumber,
+    birthDate,
+    requestId: uuid4(),
+    newPassword,
+    confirmPassword,
+    turkishId,
+  };
+
+  const res = await instancePost.post(url, data);
+  return res.data;
+};

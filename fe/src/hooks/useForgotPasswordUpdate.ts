@@ -12,7 +12,7 @@ export const useForgotPasswordUpdate = (data) => {
 
   return {
     data: mutation.data,
-    register: mutation.mutate,
+    forgotPasswordUpdate: mutation.mutate,
     isLoading: mutation.isLoading,
     error: mutation.error,
   };
