@@ -236,6 +236,8 @@ export const fetchForgotPasswordUpdate = async (
     turkishId,
   };
 
+  console.log(data);
+
   const res = await instancePost.post(url, data);
   return res.data;
 };

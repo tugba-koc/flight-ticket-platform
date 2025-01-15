@@ -193,6 +193,8 @@ public class AuthenticateManager implements AuthenticateService {
                                 throw new InvalidCredentialsException("Phone number does not match");
                         }
                         if (!user.getBirthDate().equals(createForgotPasswordRequest.getBirthDate())) {
+                                System.out.println("User birthdate: " + user.getBirthDate());
+                                System.out.println("Request birthdate: " + createForgotPasswordRequest.getBirthDate());
                                 throw new InvalidCredentialsException("Birthdate does not match");
                         }
                         return GetForgotPasswordCheckResponse.builder()
@@ -223,8 +225,10 @@ public class AuthenticateManager implements AuthenticateService {
                         if(!user.getPhoneNumber().equals(createForgotPasswordUpdateRequest.getPhoneNumber())) {
                                 throw new InvalidCredentialsException("Phone number does not match");
                         }
-                        if(!user.getTurkishId().equals(createForgotPasswordUpdateRequest.getTurkishId())) {
-                                throw new InvalidCredentialsException("Turkish ID does not match");
+                        if(!user.getBirthDate().equals(createForgotPasswordUpdateRequest.getBirthDate())) {
+                                System.out.println("User birthdate: " + user.getBirthDate());
+                                System.out.println("Request birthdate: " + createForgotPasswordUpdateRequest.getBirthDate());
+                                throw new InvalidCredentialsException("Birthdate does not match");
                         }
                         user.setPassword(passwordEncoder.encode(createForgotPasswordUpdateRequest.getNewPassword()));
                         user.setUpdatedAt(LocalDateTime.now());

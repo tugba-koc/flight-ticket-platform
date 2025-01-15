@@ -3,6 +3,7 @@ import './forgotPassword.css';
 import { Link, useNavigate } from 'react-router';
 import { useUser } from '../../context/UserContext';
 import { useForgotPasswordCheck } from '../../hooks/useForgotPasswordCheck';
+import { useForgotPasswordUpdate } from '../../hooks/useForgotPasswordUpdate';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -31,9 +32,9 @@ const ForgotPassword = () => {
     setError(null);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    forgotPasswordCheck();
+    await forgotPasswordCheck();
   };
 
   useEffect(() => {

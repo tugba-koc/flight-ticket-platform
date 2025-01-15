@@ -1,5 +1,7 @@
 package dev.tugba.flight_ticket_platform.business.requests;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,5 +15,5 @@ public class CreateForgotPasswordUpdateRequest {
         private String confirmPassword;
         private String email;
         private String phoneNumber;
-        private String turkishId;
+        private LocalDate birthDate;
 }
