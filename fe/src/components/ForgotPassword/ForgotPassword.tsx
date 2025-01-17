@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import './forgotPassword.css';
-import { Link, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useUser } from '../../context/UserContext';
 import { useForgotPasswordCheck } from '../../hooks/useForgotPasswordCheck';
 import { useForgotPasswordUpdate } from '../../hooks/useForgotPasswordUpdate';
+import UpdateComponent from './UpdateComponent/UpdateComponent';
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
   const { dispatch } = useUser();
+
+  const { forgotPasswordUpdate } = useForgotPasswordUpdate();
 
   const [formData, setFormData] = useState({
     email: '',
@@ -20,8 +23,11 @@ const ForgotPassword = () => {
   const BUTTON_DISABLED =
     error || !formData.email || !formData.phoneNumber || !formData.birthDate;
 
-  const { forgotPasswordCheck, error: errorForgotPasswordCheck } =
-    useForgotPasswordCheck(formData);
+  const {
+    forgotPasswordCheck,
+    error: errorForgotPasswordCheck,
+    isSuccess: isSuccessForgotPasswordCheck,
+  } = useForgotPasswordCheck(formData);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,6 +48,10 @@ const ForgotPassword = () => {
       setError(errorForgotPasswordCheck);
     }
   }, [errorForgotPasswordCheck]);
+
+  if (isSuccessForgotPasswordCheck) { // show forgot password update
+    return <UpdateComponent />;
+  }
 
   return (
     <>
