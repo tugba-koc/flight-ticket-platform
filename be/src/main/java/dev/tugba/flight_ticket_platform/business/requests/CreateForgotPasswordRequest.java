@@ -1,8 +1,6 @@
 package dev.tugba.flight_ticket_platform.business.requests;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

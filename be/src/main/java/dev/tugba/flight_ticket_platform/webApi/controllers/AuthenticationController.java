@@ -20,8 +20,6 @@ import dev.tugba.flight_ticket_platform.business.responses.GetResetPasswordRespo
 import dev.tugba.flight_ticket_platform.business.responses.LoginResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -61,4 +59,6 @@ public class AuthenticationController {
     public ResponseEntity<GetForgotPasswordCheckResponse> forgotPasswordUpdate(@RequestBody @Valid CreateForgotPasswordUpdateRequest createForgotPasswordUpdateRequest) {
         return ResponseEntity.ok(authenticateService.forgotPasswordUpdate(createForgotPasswordUpdateRequest));
     }
+
+    /* TODO: refresh token */
 }

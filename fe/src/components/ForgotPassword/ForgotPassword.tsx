@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './forgotPassword.css';
-import { useNavigate } from 'react-router';
-import { useUser } from '../../context/UserContext';
 import { useForgotPasswordCheck } from '../../hooks/useForgotPasswordCheck';
 import { useForgotPasswordUpdate } from '../../hooks/useForgotPasswordUpdate';
 import UpdateComponent from './UpdateComponent/UpdateComponent';
 
 const ForgotPassword = () => {
-  const navigate = useNavigate();
-  const { dispatch } = useUser();
-
   const { forgotPasswordUpdate } = useForgotPasswordUpdate();
 
   const [formData, setFormData] = useState({
